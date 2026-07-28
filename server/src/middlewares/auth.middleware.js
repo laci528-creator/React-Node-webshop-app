@@ -1,7 +1,9 @@
 import jwt from 'jsonwebtoken';
 
+// JWT token hitelesítő middleware
 export const authenticateToken = (req, res, next) => {
   const authHeader = req.headers['authorization'];
+  // Az "Bearer TOKEN" formátumból kinyerjük a tokent
   const token = authHeader && authHeader.split(' ')[1];
 
   if (!token) {
