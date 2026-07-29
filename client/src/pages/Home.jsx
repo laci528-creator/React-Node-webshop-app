@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import api from '../services/api';
 
 function Home() {
@@ -38,6 +39,12 @@ function Home() {
             <p style={{ fontSize: '1.2rem', color: '#2ecc71', fontWeight: 'bold' }}>
               €{product.price}
             </p>
+            <Link 
+              to={`/product/${product.id}`} 
+              style={{ display: 'block', textAlign: 'center', marginTop: '15px', padding: '10px', backgroundColor: '#34495e', color: '#fff', textDecoration: 'none', borderRadius: '4px', fontWeight: 'bold' }}
+            >
+              Details ansehen
+            </Link>
           </div>
         ))}
       </div>
