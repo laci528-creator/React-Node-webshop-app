@@ -22,6 +22,9 @@ function Login() {
       // Ha a bejelentkezés sikeres, elmentjük a tokent a localStorage-ba
       localStorage.setItem('token', response.data.token);
 
+      // 2. ÚJ: Elmentjük a felhasználó adatait is JSON stringként
+      localStorage.setItem('user', JSON.stringify(response.data.user));
+
       // Visszairányítjuk a felhasználót a főoldalra (termékkatalógus)
       navigate('/');
       
