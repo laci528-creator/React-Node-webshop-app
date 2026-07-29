@@ -3,6 +3,14 @@ import Navbar from './components/Navbar';
 import Home from './pages/Home';
 import Login from './pages/Login';
 import Register from './pages/Register';
+import ProtectedRoute from './components/ProtectedRoute';
+
+const Profile = () => (
+  <div style={{ padding: '20px' }}>
+    <h2>Mein Profil </h2>
+    <p>Seite nur für angemeldet Persone!</p>
+  </div>
+);
 
 function App() {
   return (
@@ -13,6 +21,14 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route 
+          path="/profile" 
+          element={
+            <ProtectedRoute>
+              <Profile />
+            </ProtectedRoute>
+          } 
+        />
       </Routes>
     </div>
   );
