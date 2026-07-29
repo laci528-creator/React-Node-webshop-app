@@ -1,4 +1,5 @@
 import { Routes, Route } from 'react-router-dom';
+import { CartProvider } from './context/CartContext';
 import Navbar from './components/Navbar';
 import Home from './pages/Home';
 import Login from './pages/Login';
@@ -15,6 +16,7 @@ const Profile = () => (
 
 function App() {
   return (
+    <CartProvider>
     <div>
       {/* Navigációs sáv minden oldalon fent van */}
       <Navbar />
@@ -33,6 +35,7 @@ function App() {
         />
       </Routes>
     </div>
+    </CartProvider>
   );
 }
 
