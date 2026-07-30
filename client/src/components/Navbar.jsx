@@ -1,7 +1,9 @@
 import { Link, useNavigate } from 'react-router-dom';
+import { useCart } from '../context/CartContext';
 
 function Navbar() {
   const navigate = useNavigate();
+  const { totalItems } = useCart();
 
   // Token és felhasználó kiolvasása a localStorage-ból
   const token = localStorage.getItem('token');
@@ -34,6 +36,14 @@ function Navbar() {
 
       <div style={{ display: 'flex', gap: '20px', alignItems: 'center' }}>
         <Link to="/" style={{ color: '#fff', textDecoration: 'none', fontWeight: '500' }}>Produkte</Link>
+
+        <Link to="/cart" style={{ color: '#fff', textDecoration: 'none', fontWeight: '500', position: 'relative' }}>
+          🛒 Warenkorb {totalItems > 0 && (
+            <span style={{ backgroundColor: '#e74c3c', color: '#fff', borderRadius: '50%', padding: '2px 6px', fontSize: '0.8rem', marginLeft: '5px' }}>
+              {totalItems}
+            </span>
+          )}
+        </Link>
 
         {token ? (
           <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
