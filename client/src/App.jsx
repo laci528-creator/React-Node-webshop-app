@@ -7,13 +7,7 @@ import Register from './pages/Register';
 import ProtectedRoute from './components/ProtectedRoute';
 import ProductDetail from './pages/ProductDetail';
 import Cart from './pages/Cart';
-
-const Profile = () => (
-  <div style={{ padding: '20px' }}>
-    <h2>Mein Profil </h2>
-    <p>Seite nur für angemeldet Persone!</p>
-  </div>
-);
+import Profile from './pages/Profile';
 
 function App() {
   return (
@@ -28,7 +22,7 @@ function App() {
         <Route path="/product/:id" element={<ProductDetail />} />
         <Route path="/cart" element={<Cart />} />
         <Route 
-          path="/profile" 
+          path="/Profile" 
           element={
             <ProtectedRoute>
               <Profile />

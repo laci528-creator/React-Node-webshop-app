@@ -45,9 +45,12 @@ function Navbar() {
           )}
         </Link>
 
+        <Link to="/profile" style={{ color: '#fff', textDecoration: 'none', fontWeight: 'bold' }}>
+          Mein Profil
+        </Link>
+
         {token ? (
           <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
-            {/* Üdvözlő szöveg a névvel */}
             <span style={{ fontSize: '0.95rem', color: '#ecf0f1' }}>
               Hallo, <strong>{user?.full_name || 'Benutzer'}</strong>!
             </span>

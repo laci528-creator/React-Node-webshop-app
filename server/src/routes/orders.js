@@ -7,7 +7,7 @@ const router = express.Router();
 // Rendelés leadása (POST /api/v1/orders)
 router.post('/', authenticateToken, async (req, res) => {
   const { cart, totalPrice } = req.body;
-  const userId = req.user.id;
+  const userId = req.user.userId;
 
   if (!cart || cart.length === 0) {
     return res.status(400).json({ message: 'Der Warenkorb ist leer.' });
@@ -45,5 +45,22 @@ router.post('/', authenticateToken, async (req, res) => {
     client.release();
   }
 });
+
+router.get('/my-orders', authenticateToken, async (req, res) => {
+  const userId = req.user.userId;
+  
+  try {
+    const result = await pool.query(
+      'SELECT id, total_price, status, created_at FROM orders WHERE user_id = $1 ORDER BY created_at DESC',
+      [userId]
+    );
+    
+    res.status(200).json(result.rows);
+  } catch (error) {
+    console.error('Fehler beim Abrufen der Bestellungen:', error);
+    res.status(500).json({ message: 'Serverfehler beim Laden der Bestellungen.' });
+  }
+});
+
 
 export default router;
