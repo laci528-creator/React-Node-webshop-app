@@ -41,9 +41,13 @@ function ProductDetail() {
       </button>
       
       <div style={{ display: 'flex', gap: '40px', flexWrap: 'wrap' }}>
-        <div style={{ flex: '1 1 300px', backgroundColor: '#f9f9f9', minHeight: '300px', display: 'flex', justifyContent: 'center', alignItems: 'center', borderRadius: '8px', border: '1px dashed #ccc' }}>
-          <span style={{ color: '#aaa' }}>[Bild Platzhalter]</span>
-        </div>
+<div style={{ flex: '1 1 300px', borderRadius: '8px', overflow: 'hidden', border: '1px solid #ddd', maxHeight: '400px' }}>
+  <img 
+    src={product.image_url || 'https://via.placeholder.com/400x300?text=Kein+Bild'} 
+    alt={product.name} 
+    style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+  />
+</div>
         
         <div style={{ flex: '2 1 300px' }}>
           <h1 style={{ margin: '0 0 10px 0' }}>{product.name}</h1>

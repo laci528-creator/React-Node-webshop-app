@@ -33,6 +33,18 @@ function Home() {
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '20px' }}>
         {products.map((product) => (
           <div key={product.id} style={{ border: '1px solid #ccc', padding: '15px', borderRadius: '8px' }}>
+            <img 
+                  src={product.image_url || 'https://via.placeholder.com/250x180?text=Kein+Bild'} 
+                  alt={product.name} 
+                  style={{ 
+                    width: '100%', 
+                    height: '180px', 
+                    objectFit: 'cover', 
+                    borderRadius: '6px', 
+                    marginBottom: '15px' 
+                  }} 
+                />
+
             <h2>{product.name}</h2>
             <p>{product.description}</p>
             <p><strong>Kategorie:</strong> {product.category}</p>
