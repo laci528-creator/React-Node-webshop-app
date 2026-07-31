@@ -1,8 +1,53 @@
+import { useState } from 'react';
 import { useCart } from '../context/CartContext';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import api from '../services/api';
 
 function Cart() {
   const { cart, removeFromCart, clearCart, totalPrice } = useCart();
+  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState(null);
+  const navigate = useNavigate();
+
+  // Rendelés feldolgozása
+  const handleCheckout = async () => {
+    const token = localStorage.getItem('token');
+
+    // Ha nincs bejelentkezve, átirányítjuk a Login oldalra
+    if (!token) {
+      alert('Bitte melden Sie sich an, um die Bestellung abzuschließen.');
+      navigate('/login');
+      return;
+    }
+
+    setLoading(true);
+    setMessage(null);
+
+    try {
+      const response = await api.post('/orders', { cart, totalPrice });
+      
+      // Kosár kiürítése
+      clearCart();
+      setMessage(`Vielen Dank für Ihre Bestellung! Bestellnummer: #${response.data.orderId}`);
+    } catch (err) {
+      console.error('Checkout Fehler:', err);
+      alert(err.response?.data?.message || 'Fehler beim Ausführen der Bestellung.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if (message) {
+    return (
+      <div style={{ maxWidth: '800px', margin: '40px auto', padding: '30px', textAlign: 'center', fontFamily: 'sans-serif', backgroundColor: '#e8f8f5', borderRadius: '8px', border: '1px solid #2ecc71' }}>
+        <h2 style={{ color: '#27ae60' }}>{message}</h2>
+        <p style={{ margin: '20px 0' }}>Ihre Bestellung wurde erfolgreich in der Datenbank gespeichert.</p>
+        <Link to="/" style={{ display: 'inline-block', padding: '10px 20px', backgroundColor: '#2980b9', color: '#fff', textDecoration: 'none', borderRadius: '4px', fontWeight: 'bold' }}>
+          Weiter einkaufen
+        </Link>
+      </div>
+    );
+  }
 
   if (cart.length === 0) {
     return (
@@ -44,24 +89,22 @@ function Cart() {
         ))}
       </div>
 
-      {/* Összesítő sáv */}
       <div style={{ marginTop: '30px', padding: '20px', backgroundColor: '#f9f9f9', borderRadius: '8px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', border: '1px solid #ddd' }}>
-        <div>
-          <button 
-            onClick={clearCart}
-            style={{ backgroundColor: '#95a5a6', color: '#fff', border: 'none', padding: '10px 15px', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold' }}
-          >
-            Warenkorb leeren
-          </button>
-        </div>
+        <button 
+          onClick={clearCart}
+          style={{ backgroundColor: '#95a5a6', color: '#fff', border: 'none', padding: '10px 15px', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold' }}
+        >
+          Warenkorb leeren
+        </button>
         
         <div style={{ textAlign: 'right' }}>
           <h2 style={{ margin: '0 0 10px 0' }}>Gesamtsumme: €{totalPrice.toFixed(2)}</h2>
           <button 
+            onClick={handleCheckout}
+            disabled={loading}
             style={{ backgroundColor: '#2ecc71', color: '#fff', border: 'none', padding: '12px 25px', borderRadius: '4px', fontSize: '1.1rem', cursor: 'pointer', fontWeight: 'bold' }}
-            onClick={() => alert('A pénztár funkció hamarosan érkezik!')}
           >
-            Zur Kasse
+            {loading ? 'Wird verarbeitet...' : 'Zur Kasse'}
           </button>
         </div>
       </div>

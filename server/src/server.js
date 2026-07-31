@@ -4,6 +4,7 @@ import helmet from 'helmet';
 import dotenv from 'dotenv';
 import authRoutes from './routes/auth.routes.js';
 import productRoutes from './routes/product.routes.js';
+import ordersRouter from './routes/orders.js';
 
 dotenv.config();
 
@@ -27,6 +28,7 @@ app.get('/api/v1/health', (req, res) => {
 
 app.use('/api/v1/auth', authRoutes);
 app.use('/api/v1/products', productRoutes);
+app.use('/api/v1/orders', ordersRouter);
 
 // --- GLOBÁLIS HIBAKEZELŐ ---
 app.use((err, req, res, next) => {
