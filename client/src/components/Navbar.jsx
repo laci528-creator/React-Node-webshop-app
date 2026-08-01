@@ -5,17 +5,17 @@ function Navbar() {
   const navigate = useNavigate();
   const { totalItems } = useCart();
 
-  // Token és felhasználó kiolvasása a localStorage-ból
-  const token = localStorage.getItem('token');
-  const storedUser = localStorage.getItem('user');
+  // Token és felhasználó kiolvasása a sessionStorage-ból
+  const token = sessionStorage.getItem('token');
+  const storedUser = sessionStorage.getItem('user');
   
   // Átalakítjuk a tárolt JSON stringet JavaScript objektummá
   const user = storedUser ? JSON.parse(storedUser) : null;
 
   // Kijelentkezés kezelése
   const handleLogout = () => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('user'); // A user adatokat is töröljük!
+    sessionStorage.removeItem('token');
+    sessionStorage.removeItem('user'); // A user adatokat is töröljük!
     navigate('/login');
     window.location.reload();
   };

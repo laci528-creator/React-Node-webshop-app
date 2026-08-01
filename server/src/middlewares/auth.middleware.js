@@ -15,7 +15,7 @@ export const authenticateToken = (req, res, next) => {
       return res.status(403).json({ message: 'Ungültiges oder abgelaufenes Token!' });
     }
 
-    console.log('Kicsomagolt JWT token tartalma:', decodedUser);
+    //console.log('Kicsomagolt JWT token tartalma:', decodedUser);
 
     req.user = decodedUser;
     next();

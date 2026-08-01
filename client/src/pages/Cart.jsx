@@ -11,7 +11,7 @@ function Cart() {
 
   // Rendelés feldolgozása
   const handleCheckout = async () => {
-    const token = localStorage.getItem('token');
+    const token = sessionStorage.getItem('token');
 
     // Ha nincs bejelentkezve, átirányítjuk a Login oldalra
     if (!token) {

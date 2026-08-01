@@ -19,12 +19,12 @@ function Login() {
       // Meghívjuk a POST /api/v1/auth/login végpontot
       const response = await api.post('/auth/login', { email, password });
 
-      // Ha a bejelentkezés sikeres, elmentjük a tokent a localStorage-ba
-      localStorage.setItem('token', response.data.token);
+      // Ha a bejelentkezés sikeres, elmentjük a tokent a sessionStorage-ba
+      sessionStorage.setItem('token', response.data.token);
 
       // 2. ÚJ: Elmentjük a felhasználó adatait is JSON stringként
-      localStorage.setItem('user', JSON.stringify(response.data.user));
-
+      sessionStorage.setItem('user', JSON.stringify(response.data.user));
+ 
       // Visszairányítjuk a felhasználót a főoldalra (termékkatalógus)
       navigate('/');
       

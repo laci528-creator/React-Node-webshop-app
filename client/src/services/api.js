@@ -9,10 +9,10 @@ const api = axios.create({
 });
 
 // Interceptor: Minden kérés előtt lefut. 
-// Ha van elmentett tokenünk a localStorage-ban, automatikusan hozzácsatolja a fejléchez.
+// Ha van elmentett tokenünk a sessionStorage-ban, automatikusan hozzácsatolja a fejléchez.
 api.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem('token');
+    const token = sessionStorage.getItem('token');
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
