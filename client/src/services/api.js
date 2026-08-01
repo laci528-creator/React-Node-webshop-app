@@ -23,4 +23,26 @@ api.interceptors.request.use(
   }
 );
 
-export default api;
+api.interceptors.response.use(
+  (response) => {
+    // Ha minden rendben, csak simán továbbengedjük az adatokat
+    return response;
+  },
+  (error) => {
+    // Ha a szerver 401-es vagy 403-as hibát dob (Lejárt / Érvénytelen token)
+    if (error.response && (error.response.status === 401 || error.response.status === 403)) {
+      
+      // Töröljük a lejárt tokent a memóriából
+      sessionStorage.removeItem('token');
+      
+      // Ha a felhasználói adatokat is elmentetted, azt is töröljük
+      sessionStorage.removeItem('user'); 
+
+      // Kidobjuk a felhasználót a bejelentkezési oldalra (ez frissíti a Navbart is)
+      window.location.href = '/login';
+    }
+    return Promise.reject(error);
+  }
+);
+
+export default api;  
