@@ -21,3 +21,13 @@ export const authenticateToken = (req, res, next) => {
     next();
   });
 };
+
+export const isAdmin = (req, res, next) => {
+  // Feltételezzük, hogy ez az authenticateToken UTÁN fut le, 
+  // így a req.user már létezik és benne van a token payload-ja.
+  if (req.user && req.user.role === 'admin') {
+    next(); // Ha admin, mehet tovább a kérés
+  } else {
+    res.status(403).json({ message: 'Zugriff verweigert! Nur für Administratoren.' }); // Nincs jogosultság
+  }
+};

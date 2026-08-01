@@ -1,5 +1,6 @@
 import pool from '../config/db.js';
 
+
 // Összes termék lekérése, kereséssel és szűréssel
 export const getProducts = async (req, res) => {
   try {
@@ -74,5 +75,34 @@ export const getProductById = async (req, res) => {
   } catch (error) {
     console.error('Hiba a termék lekérésekor:', error);
     res.status(500).json({ message: 'Serverfehler beim Abrufen des Produkts!' });
+  }
+};
+
+
+// ÚJ KONTROLLER FÜGGVÉNY: Termék feltöltése
+export const createProduct = async (req, res, next) => {
+  try {
+    const { name, description, price, category, stock, image_url } = req.body;
+
+    // 1. Alapvető validáció
+    if (!name || !price || !category || !stock || !image_url) {
+      return res.status(400).json({ message: 'Bitte alle Pflichtfelder ausfüllen!' });
+    }
+
+    // 2. Adatbázis beszúrás
+    const result = await pool.query(
+      `INSERT INTO products (name, description, price, category, stock, image_url) 
+       VALUES ($1, $2, $3, $4, $5, $6) 
+       RETURNING *`,
+      [name, description, price, category, stock, image_url]
+    );
+
+    // 3. Sikeres válasz
+    res.status(201).json({
+      message: 'Produkt erfolgreich hinzugefügt!',
+      product: result.rows[0]
+    });
+  } catch (error) {
+    next(error);
   }
 };
