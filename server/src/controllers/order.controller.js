@@ -71,3 +71,20 @@ export const createOrder = async (req, res, next) => {
     client.release(); // Visszaadjuk a kapcsolatot
   }
 };
+
+
+export const getMyOrders = async (req, res, next) => {
+  const userId = req.user.userId;
+
+  try {
+    const result = await pool.query(
+      'SELECT id, total_price, status, created_at FROM orders WHERE user_id = $1 ORDER BY created_at DESC',
+      [userId]
+    );
+
+    res.status(200).json(result.rows);
+  } catch (error) {
+    console.error('Fehler beim Abrufen der Bestellungen:', error);
+    res.status(500).json({ message: 'Serverfehler beim Laden der Bestellungen.' });
+  }
+};
