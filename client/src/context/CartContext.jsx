@@ -106,7 +106,7 @@ export function useCart() {
 
   if (context === undefined) {
     throw new Error(
-      'A useCart hook csak CartProvider-en belül használható.'
+      'useCart hook inside a CartProvider must be used within a CartProvider'
     );
   }
 
