@@ -73,12 +73,35 @@ export const createOrder = async (req, res, next) => {
 };
 
 
+// Részlet a server/src/controllers/order.controller.js fájlból
 export const getMyOrders = async (req, res, next) => {
-  const userId = req.user.userId;
+  const userId = req.user.userId || req.user.id; 
 
   try {
+    // Kibővített lekérdezés, ami a tételeket is lekéri képekkel együtt
     const result = await pool.query(
-      'SELECT id, total_price, status, created_at FROM orders WHERE user_id = $1 ORDER BY created_at DESC',
+      `SELECT 
+        o.id, 
+        o.total_price, 
+        o.status, 
+        o.created_at,
+        COALESCE(
+          json_agg(
+            json_build_object(
+              'productId', p.id,
+              'name', p.name,
+              'image', p.image_url, -- Vagy ahogy az adatbázisodban hívják a kép oszlopot
+              'price', oi.price,
+              'quantity', oi.quantity
+            )
+          ) FILTER (WHERE p.id IS NOT NULL), '[]'
+        ) as items
+      FROM orders o
+      LEFT JOIN order_items oi ON o.id = oi.order_id
+      LEFT JOIN products p ON oi.product_id = p.id
+      WHERE o.user_id = $1
+      GROUP BY o.id
+      ORDER BY o.created_at DESC`,
       [userId]
     );
 
