@@ -5,7 +5,7 @@ import pool from '../config/db.js';
 export const getProducts = async (req, res) => {
   try {
     // Kinyerjük a lekérdezési paramétereket az URL-ből (pl. ?search=Laptop&category=Elektronik)
-    const { search, category, min_price, max_price } = req.query;
+    const { search, category, min_price, max_price, sort } = req.query;
 
     // Alap SQL lekérdezés, a '1=1' egy trükk, hogy könnyen fűzhessünk hozzá 'AND' feltételeket
     let query = 'SELECT * FROM products WHERE 1=1';
@@ -40,8 +40,13 @@ export const getProducts = async (req, res) => {
       valueIndex++;
     }
 
-    // Rendezés létrehozás dátuma szerint csökkenő sorrendben
-    query += ' ORDER BY created_at DESC';
+    if (sort === 'price_asc') {
+      query += ' ORDER BY price ASC'; // Ár szerint növekvő
+    } else if (sort === 'price_desc') {
+      query += ' ORDER BY price DESC'; // Ár szerint csökkenő
+    } else {
+      query += ' ORDER BY created_at DESC'; // Alapértelmezett (legújabbak elöl)
+    }
 
     // SQL lekérdezés futtatása a felépített paraméterekkel
     const result = await pool.query(query, values);
