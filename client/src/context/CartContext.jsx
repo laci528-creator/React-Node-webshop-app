@@ -1,50 +1,114 @@
-import { createContext, useState, useContext } from 'react';
+import {
+  createContext,
+  useContext,
+  useState
+} from 'react';
 
-// Létrehozzuk a Contextet
-const CartContext = createContext();
+const CartContext = createContext(undefined);
 
-// Létrehozzuk a Provider komponenst, ami körbeöleli az alkalmazást
 export function CartProvider({ children }) {
   const [cart, setCart] = useState([]);
 
-  // Termék hozzáadása a kosárhoz
   const addToCart = (product) => {
     setCart((prevCart) => {
-      // Megnézzük, hogy a termék benne van-e már a kosárban
-      const existingItem = prevCart.find((item) => item.id === product.id);
-      
+      const existingItem = prevCart.find(
+        (item) => item.id === product.id
+      );
+
       if (existingItem) {
-        // Ha igen, növeljük a darabszámot (quantity)
         return prevCart.map((item) =>
-          item.id === product.id ? { ...item, quantity: item.quantity + 1 } : item
+          item.id === product.id
+            ? {
+                ...item,
+                quantity: item.quantity + 1
+              }
+            : item
         );
       }
-      
-      // Ha még nincs benne, hozzáadjuk 1-es darabszámmal
-      return [...prevCart, { ...product, quantity: 1 }];
+
+      return [
+        ...prevCart,
+        {
+          ...product,
+          quantity: 1
+        }
+      ];
     });
   };
 
-  // Termék törlése a kosárból
-  const removeFromCart = (id) => {
-    setCart((prevCart) => prevCart.filter((item) => item.id !== id));
+  const increaseQuantity = (id) => {
+    setCart((prevCart) =>
+      prevCart.map((item) =>
+        item.id === id
+          ? {
+              ...item,
+              quantity: item.quantity + 1
+            }
+          : item
+      )
+    );
   };
 
-  // Teljes kosár ürítése
-  const clearCart = () => setCart([]);
+  const decreaseQuantity = (id) => {
+    setCart((prevCart) =>
+      prevCart.map((item) =>
+        item.id === id && item.quantity > 1
+          ? {
+              ...item,
+              quantity: item.quantity - 1
+            }
+          : item
+      )
+    );
+  };
 
-  // Összes darabszám kiszámítása a Navbarhoz
-  const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+  const removeFromCart = (id) => {
+    setCart((prevCart) =>
+      prevCart.filter((item) => item.id !== id)
+    );
+  };
 
-  // Végösszeg kiszámítása
-  const totalPrice = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+  const clearCart = () => {
+    setCart([]);
+  };
+
+  const totalItems = cart.reduce(
+    (sum, item) => sum + item.quantity,
+    0
+  );
+
+  const totalPrice = cart.reduce(
+    (sum, item) =>
+      sum + item.price * item.quantity,
+    0
+  );
+
+  const contextValue = {
+    cart,
+    addToCart,
+    increaseQuantity,
+    decreaseQuantity,
+    removeFromCart,
+    clearCart,
+    totalItems,
+    totalPrice
+  };
 
   return (
-    <CartContext.Provider value={{ cart, addToCart, removeFromCart, clearCart, totalItems, totalPrice }}>
+    <CartContext.Provider value={contextValue}>
       {children}
     </CartContext.Provider>
   );
 }
 
-// Egyedi hook a kényelmes használatért
-export const useCart = () => useContext(CartContext);
+export function useCart() {
+  const context = useContext(CartContext);
+
+  if (context === undefined) {
+    throw new Error(
+      'A useCart hook csak CartProvider-en belül használható.'
+    );
+  }
+
+  return context;
+}
