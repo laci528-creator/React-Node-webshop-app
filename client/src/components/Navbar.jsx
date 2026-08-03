@@ -36,6 +36,7 @@ function Navbar() {
 
       <div style={{ display: 'flex', gap: '20px', alignItems: 'center' }}>
         <Link to="/" style={{ color: '#fff', textDecoration: 'none', fontWeight: '500' }}>Produkte</Link>
+        <Link to="/admin" style={{ color: '#fff', textDecoration: 'none', fontWeight: '500' }}>Admin Seite</Link>
 
         <Link to="/cart" style={{ color: '#fff', textDecoration: 'none', fontWeight: '500', position: 'relative' }}>
           🛒 Warenkorb {totalItems > 0 && (
