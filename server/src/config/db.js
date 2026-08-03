@@ -1,4 +1,5 @@
 import pg from 'pg';
+
 import dotenv from 'dotenv';
 
 dotenv.config();
@@ -25,9 +26,4 @@ pool.on('error', (err) => {
   process.exit(-1);
 });
 
-export default {
-  query: (text, params) => pool.query(text, params),
-  pool,
-};
-
-export { pool };
+export default pool;
