@@ -36,7 +36,9 @@ function Navbar() {
 
       <div style={{ display: 'flex', gap: '20px', alignItems: 'center' }}>
         <Link to="/" style={{ color: '#fff', textDecoration: 'none', fontWeight: '500' }}>Produkte</Link>
-        <Link to="/admin" style={{ color: '#fff', textDecoration: 'none', fontWeight: '500' }}>Admin Seite</Link>
+        {user?.role === 'admin' && (
+          <Link to="/admin" style={{ color: '#fff', textDecoration: 'none', fontWeight: '500' }}>Admin Seite</Link>
+        )}
 
         <Link to="/cart" style={{ color: '#fff', textDecoration: 'none', fontWeight: '500', position: 'relative' }}>
           🛒 Warenkorb {totalItems > 0 && (
@@ -46,9 +48,11 @@ function Navbar() {
           )}
         </Link>
 
-        <Link to="/profile" style={{ color: '#fff', textDecoration: 'none', fontWeight: 'bold' }}>
-          Mein Profil
-        </Link>
+        {token && (
+          <Link to="/profile" style={{ color: '#fff', textDecoration: 'none', fontWeight: 'bold' }}>
+            Mein Profil
+          </Link>
+        )}
 
         {token ? (
           <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>

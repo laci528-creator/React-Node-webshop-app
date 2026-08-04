@@ -13,7 +13,11 @@ const PORT = process.env.PORT || 5000;
 
 // --- MIDDLEWARE-EK ---
 app.use(helmet());
-app.use(cors({ origin: 'http://localhost:5173' }));
+app.use(
+  cors({
+    origin: process.env.CLIENT_URL
+  })
+);
 
 // Stripe Webhook raw parser
 app.use('/api/v1/webhook/stripe', express.raw({ type: 'application/json' }));
