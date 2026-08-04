@@ -68,7 +68,7 @@ export const login = async (req, res, next) => {
     const token = jwt.sign(
       { userId: user.id, role: user.role },
       process.env.JWT_SECRET,
-      { expiresIn: '30m' }
+      { expiresIn: JWT_EXPIRES_IN || '30m' }
     );
 
     delete user.password_hash;
