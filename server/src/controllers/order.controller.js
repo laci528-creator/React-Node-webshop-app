@@ -21,12 +21,18 @@ export const createOrder = async (req, res, next) => {
     // 1. Árak lekérése az adatbázisból és végösszeg hiteles számolása
     for (const item of cartItems) {
       const productResult = await client.query(
-        'SELECT price FROM products WHERE id = $1',
+        'SELECT price, stock, name FROM products WHERE id = $1 FOR UPDATE', // FOR UPDATE zárolja a sort, hogy más tranzakciók ne módosíthassák
         [item.productId]
       );
 
       if (productResult.rows.length === 0) {
         throw new Error(`Produkt mit ID ${item.productId} nicht gefunden.`); // Ez bedobja a catch ágba
+      }
+
+      const product = productResult.rows[0];
+
+      if (product.stock < item.quantity) {
+        throw new Error(`Nicht genügend Lagerbestand für Produkt "${product.name}". Verfügbar: ${product.stock}, angefordert: ${item.quantity}.`);
       }
 
       const actualPrice = productResult.rows[0].price;
@@ -52,6 +58,12 @@ export const createOrder = async (req, res, next) => {
       await client.query(
         'INSERT INTO order_items (order_id, product_id, quantity, price) VALUES ($1, $2, $3, $4)',
         [orderId, item.productId, item.quantity, item.price]
+      );
+    
+
+    await client.query(
+        'UPDATE products SET stock = stock - $1 WHERE id = $2',
+        [item.quantity, item.productId]
       );
     }
 
