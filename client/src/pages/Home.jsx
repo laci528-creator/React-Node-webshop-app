@@ -123,19 +123,31 @@ export default function Products() {
                 <p style={{ margin: '0 0 5px 0', fontSize: '0.85rem' }}>
                   <strong>Kategorie:</strong> {product.category}
                 </p>
+                <p style={{ margin: '0 0 5px 0', fontSize: '0.75rem' }}>
+                  <strong>Verfügbar:</strong> {product.stock} Stück
+                </p>
                 
                 <p style={{ margin: '0 0 15px 0', fontSize: '1.1rem', fontWeight: 'bold', color: '#27ae60' }}>
                   €{Number(product.price).toFixed(2)}
                 </p>
               </div>
 
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginTop: 'auto' }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginTop: 'auto' }}>                                                                                                                                                                                                                                              
+               {product.stock > 0 ? (
                 <button 
                   onClick={() => addToCart(product)}
                   style={{ backgroundColor: '#2980b9', color: '#fff', border: 'none', padding: '10px', borderRadius: '5px', cursor: 'pointer', fontWeight: 'bold' }}
                 >
                   In den Warenkorb
                 </button>
+               ) : (
+                <button 
+                  disabled
+                  style={{ backgroundColor: '#bdc3c7', color: '#fff', border: 'none', padding: '10px', borderRadius: '5px', cursor: 'not-allowed', fontWeight: 'bold' }}
+                >
+                  Ausverkauft
+                </button>
+              )}
                 
                 <Link 
                   to={`/product/${product.id}`} 

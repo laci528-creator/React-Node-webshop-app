@@ -59,8 +59,14 @@ export const createOrder = async (req, res, next) => {
         'INSERT INTO order_items (order_id, product_id, quantity, price) VALUES ($1, $2, $3, $4)',
         [orderId, item.productId, item.quantity, item.price]
       );
-    
 
+      if (
+        !Number.isInteger(item.quantity) ||
+        item.quantity <= 0
+      ) {
+        throw new Error('Ungültige Produktmenge.');
+      }
+    
     await client.query(
         'UPDATE products SET stock = stock - $1 WHERE id = $2',
         [item.quantity, item.productId]

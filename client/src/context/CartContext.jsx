@@ -17,7 +17,7 @@ export function CartProvider({ children }) {
 
       if (existingItem) {
         return prevCart.map((item) =>
-          item.id === product.id
+          item.id === product.id && item.quantity < item.stock
             ? {
                 ...item,
                 quantity: item.quantity + 1
@@ -39,7 +39,7 @@ export function CartProvider({ children }) {
   const increaseQuantity = (id) => {
     setCart((prevCart) =>
       prevCart.map((item) =>
-        item.id === id
+        item.id === id  && item.quantity < item.stock
           ? {
               ...item,
               quantity: item.quantity + 1
