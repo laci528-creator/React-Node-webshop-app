@@ -37,7 +37,7 @@ function ProductDetail() {
         onClick={() => navigate(-1)} 
         style={{ marginBottom: '20px', padding: '8px 15px', cursor: 'pointer', backgroundColor: '#ecf0f1', border: 'none', borderRadius: '4px', fontWeight: 'bold' }}
       >
-        &laturr; Zurück
+      Zurück zum Produktliste
       </button>
       
       <div style={{ display: 'flex', gap: '40px', flexWrap: 'wrap' }}>
@@ -61,6 +61,10 @@ function ProductDetail() {
           
           <p style={{ lineHeight: '1.6', marginBottom: '30px' }}>
             {product.description}
+          </p>
+
+          <p>
+            <strong>Verfügbar:</strong> {product.stock} Stück
           </p>
           
           <button 

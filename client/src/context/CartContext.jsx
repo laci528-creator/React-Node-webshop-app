@@ -1,13 +1,29 @@
 import {
   createContext,
   useContext,
-  useState
+  useState, 
+  useEffect
 } from 'react';
 
 const CartContext = createContext(undefined);
 
 export function CartProvider({ children }) {
-  const [cart, setCart] = useState([]);
+ //const [cart, setCart] = useState([]);
+
+  const [cart, setCart] = useState(() => {
+    try {
+      const savedCart = localStorage.getItem('cart');
+      // Ha volt mentett kosár, visszafejtjük JSON-ből, különben üres tömb
+      return savedCart ? JSON.parse(savedCart) : [];
+    } catch (error) {
+      console.error('Fehler beim Laden des Warenkorb:', error);
+      return [];
+    }
+  });
+
+  useEffect(() => {
+    localStorage.setItem('cart', JSON.stringify(cart));
+  }, [cart]);
 
   const addToCart = (product) => {
     setCart((prevCart) => {
@@ -24,6 +40,10 @@ export function CartProvider({ children }) {
               }
             : item
         );
+      }
+
+      if (product.stock <= 0) {
+        return prevCart;
       }
 
       return [

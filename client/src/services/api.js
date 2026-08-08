@@ -26,8 +26,8 @@ api.interceptors.response.use(
     return response;
   },
   (error) => {
-    // Ha a szerver 401-es vagy 403-as hibát dob (Lejárt / Érvénytelen token)
-    if (error.response && (error.response.status === 401 || error.response.status === 403)) {
+    // Ha a szerver 401-es hibát dob (Lejárt / Érvénytelen token)
+    if (error.response && (error.response.status === 401)) {
       
       // Töröljük a lejárt tokent a memóriából
       sessionStorage.removeItem('token');
