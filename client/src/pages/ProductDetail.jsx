@@ -27,39 +27,39 @@ function ProductDetail() {
     fetchProduct();
   }, [id]);
 
-  if (loading) return <h2 style={{ padding: '20px' }}>Laden...</h2>;
-  if (error) return <h2 style={{ padding: '20px', color: 'red' }}>{error}</h2>;
+  if (loading) return <h2 className="loading-text">Laden...</h2>;
+  if (error) return <h2 className="error-text">{error}</h2>;
   if (!product) return null;
 
   return (
-    <div style={{ maxWidth: '800px', margin: '40px auto', padding: '20px', fontFamily: 'sans-serif' }}>
+    <div className="product-detail-container">
       <button 
         onClick={() => navigate(-1)} 
-        style={{ marginBottom: '20px', padding: '8px 15px', cursor: 'pointer', backgroundColor: '#ecf0f1', border: 'none', borderRadius: '4px', fontWeight: 'bold' }}
+        className="btn-back"
       >
       Zurück zum Produktliste
       </button>
       
-      <div style={{ display: 'flex', gap: '40px', flexWrap: 'wrap' }}>
-<div style={{ flex: '1 1 300px', borderRadius: '8px', overflow: 'hidden', border: '1px solid #ddd', maxHeight: '400px' }}>
-  <img 
-    src={product.image_url || 'https://via.placeholder.com/400x300?text=Kein+Bild'} 
-    alt={product.name} 
-    style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
-  />
-</div>
+      <div className="product-layout">
+        <div className="product-image-container">
+          <img 
+            src={product.image_url || 'https://via.placeholder.com/400x300?text=Kein+Bild'} 
+            alt={product.name} 
+            className="product-image-detail"
+          />
+        </div>
         
-        <div style={{ flex: '2 1 300px' }}>
-          <h1 style={{ margin: '0 0 10px 0' }}>{product.name}</h1>
-          <p style={{ color: '#7f8c8d', fontSize: '1.1rem', marginBottom: '20px' }}>
+        <div className="product-info">
+          <h1 className="product-title">{product.name}</h1>
+          <p className="product-detail-category">
             Kategorie: <strong>{product.category}</strong>
           </p>
           
-          <p style={{ fontSize: '2rem', color: '#2ecc71', fontWeight: 'bold', margin: '0 0 20px 0' }}>
+          <p className="product-price-detail">
             €{product.price}
           </p>
           
-          <p style={{ lineHeight: '1.6', marginBottom: '30px' }}>
+          <p className="product-detail-description">
             {product.description}
           </p>
 
@@ -69,7 +69,7 @@ function ProductDetail() {
           
           <button 
             onClick={() => addToCart(product)}
-            style={{ padding: '15px 30px', backgroundColor: '#2980b9', color: '#fff', border: 'none', borderRadius: '4px', fontSize: '1.1rem', fontWeight: 'bold', cursor: 'pointer' }}
+            className="btn-add-to-cart"
           >
             In den Warenkorb
           </button>

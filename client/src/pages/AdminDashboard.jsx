@@ -54,39 +54,39 @@ export default function AdminDashboard() {
   };
 
   return (
-    <div style={{ maxWidth: '600px', margin: '40px auto', padding: '20px', background: '#fff', borderRadius: '8px', boxShadow: '0 2px 8px rgba(0,0,0,0.1)' }}>
-      <h2>Admin Dashboard – Neues Produkt</h2>
+    <div className="product-upload-container">
+      <h2>Admin Dashboard - Neues Produkt</h2>
 
-      {message && <div style={{ color: 'green', marginBottom: '15px', padding: '10px', background: '#e6f4ea', borderRadius: '4px' }}>{message}</div>}
-      {error && <div style={{ color: 'red', marginBottom: '15px', padding: '10px', background: '#fce8e6', borderRadius: '4px' }}>{error}</div>}
+      {message && <div className="success-message">{message}</div>}
+      {error && <div className="error-message">{error}</div>}
 
-      <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
+      <form onSubmit={handleSubmit} className="product-upload-form">
         <div>
-          <label style={{ display: 'block', fontWeight: 'bold', marginBottom: '5px' }}>Produktname:</label>
+          <label className="form-label">Produktname:</label>
           <input
             type="text"
             name="name"
             value={formData.name}
             onChange={handleChange}
             required
-            style={{ width: '100%', padding: '8px', borderRadius: '4px', border: '1px solid #ccc' }}
+            className="form-input"
           />
         </div>
 
         <div>
-          <label style={{ display: 'block', fontWeight: 'bold', marginBottom: '5px' }}>Beschreibung:</label>
+          <label className="form-label">Beschreibung:</label>
           <textarea
             name="description"
             value={formData.description}
             onChange={handleChange}
             rows="3"
-            style={{ width: '100%', padding: '8px', borderRadius: '4px', border: '1px solid #ccc' }}
+            className="form-input"
           />
         </div>
 
-        <div style={{ display: 'flex', gap: '10px' }}>
+        <div className="form-group">
           <div style={{ flex: 1 }}>
-            <label style={{ display: 'block', fontWeight: 'bold', marginBottom: '5px' }}>Preis (€):</label>
+            <label className="form-label">Preis (€):</label>
             <input
               type="number"
               step="0.01"
@@ -94,38 +94,38 @@ export default function AdminDashboard() {
               value={formData.price}
               onChange={handleChange}
               required
-              style={{ width: '100%', padding: '8px', borderRadius: '4px', border: '1px solid #ccc' }}
+              className="form-input"
             />
           </div>
 
           <div style={{ flex: 1 }}>
-            <label style={{ display: 'block', fontWeight: 'bold', marginBottom: '5px' }}>Kategorie:</label>
+            <label className="form-label">Kategorie:</label>
             <input
               type="text"
               name="category"
               value={formData.category}
               onChange={handleChange}
               required
-              style={{ width: '100%', padding: '8px', borderRadius: '4px', border: '1px solid #ccc' }}
+              className="form-input"
             />
           </div>
         </div>
 
-        <div style={{ display: 'flex', gap: '10px' }}>
+        <div className="form-group">
           <div style={{ flex: 1 }}>
-            <label style={{ display: 'block', fontWeight: 'bold', marginBottom: '5px' }}>Lagerbestand (Stock):</label>
+            <label className="form-label">Lagerbestand (Stock):</label>
             <input
               type="number"
               name="stock"
               value={formData.stock}
               onChange={handleChange}
               required
-              style={{ width: '100%', padding: '8px', borderRadius: '4px', border: '1px solid #ccc' }}
+              className="form-input"
             />
           </div>
 
           <div style={{ flex: 2 }}>
-            <label style={{ display: 'block', fontWeight: 'bold', marginBottom: '5px' }}>Bild URL:</label>
+            <label className="form-label">Bild URL:</label>
             <input
               type="url"
               name="image_url"
@@ -133,23 +133,14 @@ export default function AdminDashboard() {
               onChange={handleChange}
               placeholder="https://example.com/image.jpg"
               required
-              style={{ width: '100%', padding: '8px', borderRadius: '4px', border: '1px solid #ccc' }}
+              className="form-input"
             />
           </div>
         </div>
 
         <button
           type="submit"
-          style={{
-            background: '#007bff',
-            color: '#white',
-            padding: '10px 15px',
-            border: 'none',
-            borderRadius: '4px',
-            fontWeight: 'bold',
-            cursor: 'pointer',
-            marginTop: '10px'
-          }}
+          className="upload-button" 
         >
           Produkt hochladen
         </button>

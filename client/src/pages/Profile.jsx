@@ -42,102 +42,101 @@ function Profile() {
     navigate('/login');
   };
 
-  return (
-    <div style={{ maxWidth: '800px', margin: '40px auto', padding: '20px', fontFamily: 'sans-serif' }}>
+return (
+  <div className="profile">
 
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '30px' }}>
-        <h1>{user ? user.full_name : 'Mein Profil'}</h1>
-        <button 
-          onClick={handleLogout}
-          style={{ backgroundColor: '#e74c3c', color: '#fff', border: 'none', padding: '10px 15px', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold' }}
-        >
-          Abmelden
-        </button>
-      </div>
+    <div className="profile-header">
+      <h1>{user ? user.full_name : 'Mein Profil'}</h1>
 
-      <h2>Meine Bestellungen</h2>
-      
-      {loading ? (
-        <p>Bestellungen werden geladen...</p>
-      ) : orders.length === 0 ? (
-        <p style={{ color: '#7f8c8d', fontStyle: 'italic' }}>Du hast noch keine Bestellungen getätigt.</p>
-      ) : (
-<div style={{ display: 'flex', flexDirection: 'column', gap: '25px' }}>
-  {orders.map((order) => (
-    <div key={order.id} style={{ 
-      padding: '20px', 
-      border: '1px solid #dcdcdc', 
-      borderRadius: '10px', 
-      backgroundColor: '#ffffff', 
-      boxShadow: '0 4px 6px rgba(0,0,0,0.2)' 
-    }}>
-      
-      {/* 1. FEJLÉC: Rendelés száma és dátuma */}
-      <div style={{ 
-        display: 'flex', 
-        justifyContent: 'space-between', 
-        alignItems: 'center', 
-        borderBottom: '1px solid #eee', 
-        paddingBottom: '12px', 
-        marginBottom: '15px' 
-      }}>
-        <h3 style={{ margin: 0, fontSize: '1.1rem', color: '#2c3e50' }}>
-          Bestellung #{order.id}
-        </h3>
-        <span style={{ fontSize: '0.9rem', color: '#7f8c8d' }}>
-          Datum: {new Date(order.created_at).toLocaleDateString('de-DE')}
-        </span>
-      </div>
+      <button
+        onClick={handleLogout}
+        className="logout-button"
+      >
+        Abmelden
+      </button>
+    </div>
 
-      {/* 2. TÉTELEK LISTÁJA */}
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-        {order.items.map((item) => (
-          <div key={item.productId} style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
-            <img 
-              src={item.image} 
-              alt={item.name} 
-              style={{ width: '50px', height: '50px', objectFit: 'cover', borderRadius: '6px', border: '1px solid #ddd' }}
-            />
-            <div style={{ flex: 1 }}>
-              <p style={{ margin: 0, fontWeight: 'bold', fontSize: '0.95rem' }}>{item.name}</p>
-              <p style={{ margin: 0, fontSize: '0.85rem', color: '#7f8c8d' }}>
-                {item.quantity}x €{Number(item.price).toFixed(2)}
-              </p>
-            </div>
-            <div style={{ fontWeight: 'bold', color: '#2c3e50' }}>
-              €{(item.quantity * item.price).toFixed(2)}
-            </div>
+    <h2>Meine Bestellungen</h2>
+
+    {loading ? (
+      <p>Bestellungen werden geladen...</p>
+    ) : orders.length === 0 ? (
+      <p className="no-orders">
+        Du hast noch keine Bestellungen getätigt.
+      </p>
+    ) : (
+      orders.map((order) => (
+        <div key={order.id} className="order-card">
+
+          {/* Rendelés fejléce */}
+          <div className="order-header">
+            <h3 className="order-title">
+              Bestellung #{order.id}
+            </h3>
+
+            <span className="order-date">
+              Datum:{' '}
+              {new Date(order.created_at).toLocaleDateString('de-DE')}
+            </span>
           </div>
-        ))}
-      </div>
 
-      {/* 3. LÁBLÉC: Státusz és Végösszeg */}
-      <div style={{ 
-        marginTop: '15px', 
-        paddingTop: '15px', 
-        borderTop: '1px dashed #eee', 
-        display: 'flex', 
-        justifyContent: 'space-between', 
-        alignItems: 'center' 
-      }}>
-        <span style={{ fontSize: '0.9rem', color: '#7f8c8d' }}>
-          Bestellstatus: <strong style={{ textTransform: 'capitalize', color: '#27ae60' }}>{order.status}</strong>
-        </span>
-        
-        <div style={{ textAlign: 'right' }}>
-          <span style={{ fontSize: '0.9rem', color: '#7f8c8d', marginRight: '10px' }}>Gesamtsumme:</span>
-          <span style={{ fontSize: '1.2rem', fontWeight: 'bold', color: '#27ae60' }}>
-            €{Number(order.total_price).toFixed(2)}
-          </span>
+          {/* Termékek */}
+          <div className="order-items">
+            {order.items.map((item) => (
+              <div
+                key={item.productId}
+                className="order-item"
+              >
+                <img
+                  src={item.image}
+                  alt={item.name}
+                  className="order-item-image"
+                />
+
+                <div className="order-item-info">
+                  <p className="order-item-name">
+                    {item.name}
+                  </p>
+
+                  <p className="order-item-details">
+                    {item.quantity}x €
+                    {Number(item.price).toFixed(2)}
+                  </p>
+                </div>
+
+                <div className="order-item-total">
+                  €
+                  {(item.quantity * item.price).toFixed(2)}
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Rendelés lábléce */}
+          <div className="order-footer">
+
+            <span className="order-status">
+              Bestellstatus:{' '}
+              <strong>{order.status}</strong>
+            </span>
+
+            <div className="order-total">
+              <span className="order-total-label">
+                Gesamtsumme:
+              </span>
+
+              <span className="order-total-price">
+                €{Number(order.total_price).toFixed(2)}
+              </span>
+            </div>
+
+          </div>
         </div>
-      </div>
+      ))
+    )}
 
-    </div>
-  ))}
-</div>
-      )}
-    </div>
-  );
+  </div>
+);
 }
 
 export default Profile;

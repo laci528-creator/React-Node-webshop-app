@@ -43,44 +43,24 @@ export default function Products() {
   }, [searchQuery, sortOrder]); // <--- Figyeljük a sortOrder változását is!
 
   return (
-    <div style={{ maxWidth: '1200px', margin: '40px auto', padding: '20px', fontFamily: 'sans-serif' }}>
+    <div className="home-page">
       <h1>Webshop Produktkatalog</h1>
 
       {/* --- KERESŐ ÉS RENDEZŐ SÁV --- */}
-      <div style={{ margin: '20px 0', display: 'flex', gap: '15px', justifyContent: 'center', flexWrap: 'wrap' }}>
-        {/* Keresőmező */}
+      <div className="search-sort-container">
         <input 
           type="text"
           placeholder="Produkte durchsuchen..."
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          style={{
-            flex: 1,
-            minWidth: '250px',
-            maxWidth: '500px',
-            padding: '12px 15px',
-            fontSize: '1rem',
-            border: '1px solid #ccc',
-            borderRadius: '8px',
-            outline: 'none',
-            boxShadow: '0 2px 4px rgba(0,0,0,0.05)'
-          }}
+          className="search-input"
         />
 
         {/* --- ÚJ: RENDEZÉS LEGÖRDÜLŐ MENÜ --- */}
         <select 
           value={sortOrder}
           onChange={(e) => setSortOrder(e.target.value)}
-          style={{
-            padding: '12px 15px',
-            fontSize: '1rem',
-            border: '1px solid #ccc',
-            borderRadius: '8px',
-            backgroundColor: '#fff',
-            cursor: 'pointer',
-            outline: 'none',
-            boxShadow: '0 2px 4px rgba(0,0,0,0.05)'
-          }}
+          className="sort-select"
         >
           <option value="">Neueste zuerst (Standard)</option>
           <option value="price_asc">Preis: Aufsteigend (Günstigste zuerst)</option>
@@ -92,58 +72,49 @@ export default function Products() {
       {loading ? (
         <p style={{ textAlign: 'center' }}>Produkte werden geladen...</p>
       ) : products.length === 0 ? (
-        <p style={{ textAlign: 'center', color: '#7f8c8d', fontStyle: 'italic', marginTop: '40px' }}>
+        <p className="no-products-message">
           Keine Produkte gefunden, die deinen Kriterien entsprechen.
         </p>
       ) : (
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))', gap: '20px' }}>
+        <div className="products-grid">
           {products.map((product) => (
-            <div key={product.id} style={{ 
-              border: '1px solid #dcdcdc', 
-              borderRadius: '10px', 
-              padding: '15px', 
-              backgroundColor: '#ffffff', 
-              display: 'flex', 
-              flexDirection: 'column', 
-              justifyContent: 'space-between', 
-              height: '100%' 
-            }}>
-              <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
+            <div key={product.id} className="product-card">
+              <div className="product-card-element">
                 <img 
                   src={product.image_url} 
                   alt={product.name} 
-                  style={{ width: '100%', height: '180px', objectFit: 'cover', borderRadius: '6px', marginBottom: '10px' }}
+                  className="product-image"
                 />
                 
-                <h3 style={{ margin: '0 0 5px 0', fontSize: '1.1rem' }}>{product.name}</h3>
-                <p style={{ margin: '0 0 10px 0', fontSize: '0.85rem', color: '#7f8c8d', flex: 1 }}>
+                <h3 className="product-name">{product.name}</h3>
+                <p className="product-description">
                   {product.description}
                 </p>
                 
-                <p style={{ margin: '0 0 5px 0', fontSize: '0.85rem' }}>
+                <p className="product-category">
                   <strong>Kategorie:</strong> {product.category}
                 </p>
-                <p style={{ margin: '0 0 5px 0', fontSize: '0.75rem' }}>
+                <p className="product-stock">
                   <strong>Verfügbar:</strong> {product.stock} Stück
                 </p>
                 
-                <p style={{ margin: '0 0 15px 0', fontSize: '1.1rem', fontWeight: 'bold', color: '#27ae60' }}>
+                <p className="product-price">
                   €{Number(product.price).toFixed(2)}
                 </p>
               </div>
 
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginTop: 'auto' }}>                                                                                                                                                                                                                                              
+              <div className="product-actions-buttons">                                                                                                                                                                                                                                              
                {product.stock > 0 ? (
                 <button 
                   onClick={() => addToCart(product)}
-                  style={{ backgroundColor: '#2980b9', color: '#fff', border: 'none', padding: '10px', borderRadius: '5px', cursor: 'pointer', fontWeight: 'bold' }}
+                  className="primary-button"
                 >
                   In den Warenkorb
                 </button>
                ) : (
                 <button 
                   disabled
-                  style={{ backgroundColor: '#bdc3c7', color: '#fff', border: 'none', padding: '10px', borderRadius: '5px', cursor: 'not-allowed', fontWeight: 'bold' }}
+                  className="unavailable-button"
                 >
                   Ausverkauft
                 </button>
@@ -151,7 +122,7 @@ export default function Products() {
                 
                 <Link 
                   to={`/product/${product.id}`} 
-                  style={{ textAlign: 'center', backgroundColor: '#34495e', color: '#fff', padding: '10px', borderRadius: '5px', textDecoration: 'none', fontWeight: 'bold', fontSize: '0.9rem' }}
+                  className="secondary-button"
                 >
                   Details ansehen
                 </Link>

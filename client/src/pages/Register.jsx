@@ -30,50 +30,49 @@ function Register() {
   };
 
   return (
-    <div style={{ maxWidth: '400px', margin: '40px auto', padding: '20px', border: '1px solid #ccc', borderRadius: '8px', fontFamily: 'sans-serif' }}>
+    <div className="login-container">
       <h2>Registrieren</h2>
       
-      {/* Hibaüzenet kiírása */}
-      {error && <div style={{ color: 'red', marginBottom: '15px', padding: '10px', backgroundColor: '#fd8d8d22', borderRadius: '4px' }}>{error}</div>}
+      {error && <div className="error-message">{error}</div>}
 
-      <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
+      <form onSubmit={handleSubmit} className="login-form">
         
         <div>
-          <label style={{ display: 'block', marginBottom: '5px', fontWeight: '500' }}>Benutzername:</label>
+          <label className="form-label">Benutzername:</label>
           <input 
             type="text" 
             value={fullName} 
             onChange={(e) => setFullName(e.target.value)} 
             required
-            style={{ width: '100%', padding: '8px', boxSizing: 'border-box', borderRadius: '4px', border: '1px solid #ccc' }}
+            className="form-input"
           />
         </div>
 
         <div>
-          <label style={{ display: 'block', marginBottom: '5px', fontWeight: '500' }}>E-Mail-Adresse:</label>
+          <label className="form-label">E-Mail-Adresse:</label>
           <input 
             type="email" 
             value={email} 
             onChange={(e) => setEmail(e.target.value)} 
             required
-            style={{ width: '100%', padding: '8px', boxSizing: 'border-box', borderRadius: '4px', border: '1px solid #ccc' }}
+            className="form-input"
           />
         </div>
 
         <div>
-          <label style={{ display: 'block', marginBottom: '5px', fontWeight: '500' }}>Passwort:</label>
+          <label className="form-label">Passwort:</label>
           <input 
             type="password" 
             value={password} 
             onChange={(e) => setPassword(e.target.value)} 
             required
-            style={{ width: '100%', padding: '8px', boxSizing: 'border-box', borderRadius: '4px', border: '1px solid #ccc' }}
+            className="form-input"
           />
         </div>
 
         <button 
           type="submit" 
-          style={{ padding: '10px', backgroundColor: '#2c3e50', color: '#fff', border: 'none', borderRadius: '4px', fontWeight: 'bold', cursor: 'pointer' }}
+          className="login-button"
         >
           Konto erstellen
         </button>
