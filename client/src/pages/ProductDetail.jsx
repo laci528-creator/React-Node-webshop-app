@@ -67,12 +67,20 @@ function ProductDetail() {
             <strong>Verfügbar:</strong> {product.stock} Stück
           </p>
           
-          <button 
-            onClick={() => addToCart(product)}
-            className="btn-add-to-cart"
-          >
-            In den Warenkorb
-          </button>
+          {product.stock > 0 ? (
+            <button 
+              onClick={() => addToCart(product)}
+              className="btn-add-to-cart"
+            >
+              In den Warenkorb
+            </button>) : (
+            <button 
+              disabled
+              className="unavailable-button"
+            >
+              Ausverkauft
+            </button>
+          )}
         </div>
       </div>
     </div>
