@@ -89,6 +89,7 @@ export default function AdminDashboard() {
             <label className="form-label">Preis (€):</label>
             <input
               type="number"
+              min="0.01"
               step="0.01"
               name="price"
               value={formData.price}
@@ -116,6 +117,8 @@ export default function AdminDashboard() {
             <label className="form-label">Lagerbestand (Stock):</label>
             <input
               type="number"
+              min="0"
+              step="1"
               name="stock"
               value={formData.stock}
               onChange={handleChange}

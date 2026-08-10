@@ -20,6 +20,14 @@ export const createOrder = async (req, res, next) => {
 
     // 1. Árak lekérése az adatbázisból és végösszeg hiteles számolása
     for (const item of cartItems) {
+
+      if (
+        !Number.isInteger(item.quantity) ||
+        item.quantity <= 0
+      ) {
+        throw new Error('Ungültige Produktmenge.');
+      }
+
       const productResult = await client.query(
         'SELECT price, stock, name FROM products WHERE id = $1 FOR UPDATE', // FOR UPDATE zárolja a sort, hogy más tranzakciók ne módosíthassák
         [item.productId]
@@ -60,13 +68,6 @@ export const createOrder = async (req, res, next) => {
         [orderId, item.productId, item.quantity, item.price]
       );
 
-      if (
-        !Number.isInteger(item.quantity) ||
-        item.quantity <= 0
-      ) {
-        throw new Error('Ungültige Produktmenge.');
-      }
-    
     await client.query(
         'UPDATE products SET stock = stock - $1 WHERE id = $2',
         [item.quantity, item.productId]

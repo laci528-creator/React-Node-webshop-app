@@ -12,10 +12,8 @@ export const authenticateToken = (req, res, next) => {
 
   jwt.verify(token, process.env.JWT_SECRET, (err, decodedUser) => {
     if (err) {
-      return res.status(403).json({ message: 'Ungültiges oder abgelaufenes Token!' });
+      return res.status(401).json({ message: 'Ungültiges oder abgelaufenes Token!' });
     }
-
-    //console.log('Kicsomagolt JWT token tartalma:', decodedUser);
 
     req.user = decodedUser;
     next();
@@ -23,11 +21,10 @@ export const authenticateToken = (req, res, next) => {
 };
 
 export const isAdmin = (req, res, next) => {
-  // Feltételezzük, hogy ez az authenticateToken UTÁN fut le, 
-  // így a req.user már létezik és benne van a token payload-ja.
-  if (req.user && req.user.role === 'admin') {
-    next(); // Ha admin, mehet tovább a kérés
-  } else {
-    res.status(403).json({ message: 'Zugriff verweigert! Nur für Administratoren.' }); // Nincs jogosultság
+
+  if (req.user?.role !== 'admin') {
+    return res.status(403).json({
+      message: 'Zugriff verweigert!'
+    });
   }
 };
