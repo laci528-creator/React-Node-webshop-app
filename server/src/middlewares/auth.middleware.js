@@ -27,4 +27,5 @@ export const isAdmin = (req, res, next) => {
       message: 'Zugriff verweigert!'
     });
   }
+  next();
 };
