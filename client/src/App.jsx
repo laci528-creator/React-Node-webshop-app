@@ -1,5 +1,5 @@
 import { Routes, Route } from 'react-router-dom';
-import { CartProvider } from './context/CartContext';
+import { CartProvider } from './context/CartProvider';
 import Navbar from './components/Navbar';
 import Home from './pages/Home';
 import Login from './pages/Login';

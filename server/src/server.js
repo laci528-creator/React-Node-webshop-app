@@ -19,13 +19,9 @@ app.use(
   })
 );
 
-// Stripe Webhook raw parser
-app.use('/api/v1/webhook/stripe', express.raw({ type: 'application/json' }));
-
 // JSON parser minden más végponthoz
 app.use(express.json());
 
-// --- VÉGPONTOK ---
 app.get('/api/v1/health', (req, res) => {
   res.status(200).json({ status: 'ok', timestamp: new Date() });
 });
@@ -45,5 +41,5 @@ app.use((err, req, res, next) => {
 });
 
 app.listen(PORT, () => {
-  console.log(`🚀 Backend-Server läuft auf http://localhost:${PORT}`);
+  console.log(`Backend-Server läuft auf http://localhost:${PORT}`);
 });

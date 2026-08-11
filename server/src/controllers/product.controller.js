@@ -90,9 +90,19 @@ export const createProduct = async (req, res, next) => {
     const { name, description, price, category, stock, image_url } = req.body;
 
     // 1. Alapvető validáció
-    if (!name || !price || !category || !stock || !image_url) {
-      return res.status(400).json({ message: 'Bitte alle Pflichtfelder ausfüllen!' });
-    }
+      if (
+        !name?.trim() ||
+        !category?.trim() ||
+        !image_url?.trim() ||
+        !Number.isFinite(price) ||
+        price <= 0 ||
+        !Number.isInteger(stock) ||
+        stock < 0
+      ) {
+        return res.status(400).json({
+          message: 'Ungültige Produktdaten!'
+        });
+      }
 
     // 2. Adatbázis beszúrás
     const result = await pool.query(

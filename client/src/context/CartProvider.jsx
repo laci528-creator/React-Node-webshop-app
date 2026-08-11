@@ -1,14 +1,8 @@
-import {
-  createContext,
-  useContext,
-  useState, 
-  useEffect
-} from 'react';
+import { useState, useEffect } from 'react';
+import CartContext from './CartContext';
 
-const CartContext = createContext(undefined);
 
 export function CartProvider({ children }) {
- //const [cart, setCart] = useState([]);
 
   const [cart, setCart] = useState(() => {
     try {
@@ -119,16 +113,4 @@ export function CartProvider({ children }) {
       {children}
     </CartContext.Provider>
   );
-}
-
-export function useCart() {
-  const context = useContext(CartContext);
-
-  if (context === undefined) {
-    throw new Error(
-      'useCart hook inside a CartProvider must be used within a CartProvider'
-    );
-  }
-
-  return context;
 }
