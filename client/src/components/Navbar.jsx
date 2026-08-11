@@ -21,64 +21,48 @@ function Navbar() {
   };
 
   return (
-    <nav style={{
-      display: 'flex',
-      justifyContent: 'space-between',
-      alignItems: 'center',
-      padding: '15px 30px',
-      backgroundColor: '#2c3e50',
-      color: '#fff',
-      boxShadow: '0 2px 5px rgba(0,0,0,0.1)'
-    }}>
+    <nav className="navbar">
       <h2 style={{ margin: 0 }}>
-        <Link to="/" style={{ color: '#fff', textDecoration: 'none' }}>Webshop</Link>
+        <Link to="/" className="webshop-link ">Webshop</Link>
       </h2>
 
-      <div style={{ display: 'flex', gap: '20px', alignItems: 'center' }}>
-        <Link to="/" style={{ color: '#fff', textDecoration: 'none', fontWeight: '500' }}>Produkte</Link>
+      <div className="nav-links">
+        <Link to="/" className="nav-link-a">Produkte</Link>
         {user?.role === 'admin' && (
-          <Link to="/admin" style={{ color: '#fff', textDecoration: 'none', fontWeight: '500' }}>Admin Seite</Link>
+          <Link to="/admin" className="nav-link-a">Admin Seite</Link>
         )}
 
-        <Link to="/cart" style={{ color: '#fff', textDecoration: 'none', fontWeight: '500', position: 'relative' }}>
+        <Link to="/cart" className="nav-link-a" style={{ position: 'relative' }}>
           🛒 Warenkorb {totalItems > 0 && (
-            <span style={{ backgroundColor: '#e74c3c', color: '#fff', borderRadius: '50%', padding: '2px 6px', fontSize: '0.8rem', marginLeft: '5px' }}>
+            <span className="cart-item-count">
               {totalItems}
             </span>
           )}
         </Link>
 
         {token && (
-          <Link to="/profile" style={{ color: '#fff', textDecoration: 'none', fontWeight: 'bold' }}>
+          <Link to="/profile" className="nav-link-a">
             Mein Profil
           </Link>
         )}
 
         {token ? (
-          <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
-            <span style={{ fontSize: '0.95rem', color: '#ecf0f1' }}>
+          <div className="user-info">
+            <span className="user-name">
               Hallo, <strong>{user?.full_name || 'Benutzer'}</strong>!
             </span>
 
             <button 
               onClick={handleLogout}
-              style={{
-                backgroundColor: '#e74c3c',
-                color: '#fff',
-                border: 'none',
-                padding: '8px 15px',
-                borderRadius: '4px',
-                cursor: 'pointer',
-                fontWeight: '500'
-              }}
+              className="logout-button"
             >
               Abmelden
             </button>
           </div>
         ) : (
           <>
-            <Link to="/login" style={{ color: '#fff', textDecoration: 'none', fontWeight: '500' }}>Anmelden</Link>
-            <Link to="/register" style={{ color: '#fff', textDecoration: 'none', fontWeight: '500' }}>Registrieren</Link>
+            <Link to="/login" className="nav-link-a">Anmelden</Link>
+            <Link to="/register" className="nav-link-a">Registrieren</Link>
           </>
         )}
       </div>
