@@ -17,7 +17,6 @@ function Navbar() {
     sessionStorage.removeItem('token');
     sessionStorage.removeItem('user'); // A user adatokat is töröljük!
     navigate('/login');
-    window.location.reload();
   };
 
   return (
