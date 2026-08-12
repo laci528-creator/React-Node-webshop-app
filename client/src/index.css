@@ -695,3 +695,31 @@ body {
       color: #ecf0f1;
 }
 
+@media (max-width: 768px) {
+  .navbar {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 10px 20px;
+  }
+
+  .nav-links {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 0.5rem;
+  }
+
+  .nav-links a,
+  .nav-links button {
+    width: 100%;
+    margin: 5px 0;
+    text-align: center;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.35);
+  }
+  .user-info {
+    flex-direction: column;
+    justify-content: center;
+    margin-top: 6px;
+  }
+}
