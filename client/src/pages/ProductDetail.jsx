@@ -7,10 +7,21 @@ function ProductDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
   const { addToCart } = useCart(); 
-  
+  const [message, setMessage] = useState('');
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  const handleAddToCart = (product) => {
+  addToCart(product);
+
+  setMessage(`${product.name} wurde zum Warenkorb hinzugefügt.`);
+
+  setTimeout(() => {
+    setMessage('');
+  }, 2000);
+};
+
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -33,6 +44,11 @@ function ProductDetail() {
 
   return (
     <div className="product-detail-container">
+      {message && (
+  <div className="cart-toast">
+    ✓ {message}
+  </div>
+)}
       <button 
         onClick={() => navigate(-1)} 
         className="btn-back"
@@ -69,7 +85,7 @@ function ProductDetail() {
           
           {product.stock > 0 ? (
             <button 
-              onClick={() => addToCart(product)}
+              onClick={() => handleAddToCart(product)}
               className="btn-add-to-cart"
             >
               In den Warenkorb

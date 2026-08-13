@@ -10,6 +10,17 @@ export default function Products() {
   const [sortOrder, setSortOrder] = useState(''); // <--- ÚJ: Rendezési állapot
   const [loading, setLoading] = useState(true);
   const { addToCart } = useCart();
+  const [message, setMessage] = useState('');
+
+const handleAddToCart = (product) => {
+  addToCart(product);
+
+  setMessage(`${product.name} wurde zum Warenkorb hinzugefügt.`);
+
+  setTimeout(() => {
+    setMessage('');
+  }, 2000);
+};
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -44,9 +55,13 @@ export default function Products() {
 
   return (
     <div className="home-page">
+      {message && (
+        <div className="cart-toast">
+          ✓ {message}
+        </div>
+      )}
       <h1>Webshop Produktkatalog</h1>
 
-      {/* --- KERESŐ ÉS RENDEZŐ SÁV --- */}
       <div className="search-sort-container">
         <input 
           type="text"
@@ -106,7 +121,7 @@ export default function Products() {
               <div className="product-actions-buttons">                                                                                                                                                                                                                                              
                {product.stock > 0 ? (
                 <button 
-                  onClick={() => addToCart(product)}
+                  onClick={() => handleAddToCart(product)}
                   className="primary-button"
                 >
                   In den Warenkorb

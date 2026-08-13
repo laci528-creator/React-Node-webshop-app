@@ -427,6 +427,24 @@ body {
 
 /* --- Product Detail Page Styles --- */
 
+.cart-toast {
+  align-items: center;
+  position: fixed;
+  top: 80px;
+  right: 20px;
+  z-index: 1000;
+  margin-bottom: 20px;
+
+  padding: 14px 20px;
+  background-color: #28a745;
+  color: white;
+
+  border-radius: 6px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+
+  font-weight: bold;
+}
+
 .product-detail-container {
   max-width: 800px;
   margin: 40px auto;
@@ -746,4 +764,12 @@ body {
     text-align: center;
   }
 
+  .cart-toast {
+    top: 20px;
+    left: 20px;
+    right: 20px;
+
+    text-align: center;
+  }
 }
+
