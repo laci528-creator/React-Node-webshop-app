@@ -153,7 +153,7 @@ npm run dev
 
 ## Live Demo
 
-Live demo will be added after deployment.
+https://react-node-webshop-app.vercel.app
 
 ---
 
@@ -304,4 +304,4 @@ npm run dev
 
 ## Live Demo
 
-Der Link zur Live-Demo wird nach dem Deployment ergänzt.
+https://react-node-webshop-app.vercel.app
