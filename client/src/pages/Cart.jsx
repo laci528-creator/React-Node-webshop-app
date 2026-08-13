@@ -134,21 +134,12 @@ if (cart.length === 0) {
 </div>
 
       <div className="cart-summary">
-        <button 
-          onClick={clearCart}
-          className="secondary-button"
-        >
-          Warenkorb leeren
-        </button>
+        <div className="cart-summary-content">
+          <h2 className="cart-summary-title">Bestellübersicht</h2>
+          <p className="cart-summary-text">Gesamtanzahl der Produkte: {cart.reduce((total, item) => total + item.quantity, 0)}</p>
         
-        <div className="cart-total">
-          <h2 className="item-total-price" >Gesamtsumme: €{totalPrice.toFixed(2)}</h2>
-          
-          <div className="checkout-buttons">
-            <Link to="/" className="secondary-button" style={{ textDecoration: 'none' , marginRight: '10px' }}>
-              Weiter einkaufen
-            </Link>
-            <button 
+        <h2 className="item-total-price" >Gesamtsumme: €{totalPrice.toFixed(2)}</h2>
+          <button 
               onClick={handleCheckout} 
               disabled={isSubmitting || cart.length === 0}
               className="order-button"
@@ -159,8 +150,21 @@ if (cart.length === 0) {
             >
               {isSubmitting ? 'Wird bearbeitet...' : 'Jetzt kaufen'}
             </button>
+            </div>
+          <div className="cart-actions">
+            <button 
+              onClick={clearCart}
+              className="secondary-button" style={{ backgroundColor: 'red' }}
+            >
+              Warenkorb leeren
+            </button>
+          
+            <Link to="/" className="secondary-button">
+              Weiter einkaufen
+            </Link>
+
           </div>
-        </div>
+        
       </div>
     </div>
   );
