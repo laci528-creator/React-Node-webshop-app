@@ -4,12 +4,11 @@ import { authenticateToken, isAdmin } from '../middlewares/auth.middleware.js';
 
 const router = express.Router();
 
-// GET /api/v1/products - Összes termék listázása és keresése
+// GET /api/v1/products - All products
 router.get('/', getProducts);
-
-// GET /api/v1/products/:id - Egy adott termék részleteinek lekérése
-// Fontos: Ezt mindig a gyökér útvonal ('/') alá tegyük!
+// Get /api/v1/products/:id - one product by id
 router.get('/:id', getProductById);
+
 
 router.post('/', authenticateToken, isAdmin, createProduct);
 
