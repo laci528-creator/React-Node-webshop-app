@@ -1,52 +1,76 @@
 import pool from '../config/db.js';
 
 export const createOrder = async (req, res, next) => {
-  // A bejelentkezett felhasználó ID-ját az authenticateToken middleware biztosítja!
   const userId = req.user.userId; 
   const { cartItems } = req.body; 
 
-  if (!cartItems || cartItems.length === 0) {
-    return res.status(400).json({ message: "Der Warenkorb ist leer." });
-  }
+    if (!Array.isArray(cartItems) || cartItems.length === 0) {
+      return res.status(400).json({
+        message: "Der Warenkorb ist leer.",
+      });
+    }
 
-  // Pool helyett most egy dedikált 'client'-et kérünk, hogy használhassunk tranzakciókat
+    for (const item of cartItems) {
+        if (
+          !item ||
+          !Number.isInteger(item.productId) ||
+          item.productId <= 0 ||
+          !Number.isInteger(item.quantity) ||
+          item.quantity <= 0
+          ) {
+            return res.status(400).json({
+              message: "Ungültige Bestelldaten.",
+            });
+        }
+      }
+
+    const productIds = cartItems.map((item) => item.productId);
+
+    if (new Set(productIds).size !== productIds.length) {
+      return res.status(400).json({
+        message: "Doppelte Produkte im Warenkorb sind nicht erlaubt.",
+      });
+    }
+
+  // pool.connect() is used to get a client from the connection pool. This allows us to perform multiple queries in a single transaction.
   const client = await pool.connect();
 
   try {
-    await client.query('BEGIN'); // Tranzakció indítása
+    await client.query('BEGIN'); // start a transaction
 
     let calculatedTotal = 0;
     const itemsToInsert = [];
 
-    // 1. Árak lekérése az adatbázisból és végösszeg hiteles számolása
+    // 1. price calculation and stock validation from the database
     for (const item of cartItems) {
 
-      if (
-        !Number.isInteger(item.quantity) ||
-        item.quantity <= 0
-      ) {
-        throw new Error('Ungültige Produktmenge.');
-      }
-
       const productResult = await client.query(
-        'SELECT price, stock, name FROM products WHERE id = $1 FOR UPDATE', // FOR UPDATE zárolja a sort, hogy más tranzakciók ne módosíthassák
+        'SELECT price, stock, name FROM products WHERE id = $1 FOR UPDATE',
         [item.productId]
-      );
+        );
 
-      if (productResult.rows.length === 0) {
-        throw new Error(`Produkt mit ID ${item.productId} nicht gefunden.`); // Ez bedobja a catch ágba
-      }
+        if (productResult.rows.length === 0) {
+          const error = new Error(
+            `Produkt mit ID ${item.productId} nicht gefunden.`
+          );
+          error.status = 404;
+          throw error;
+        }
 
       const product = productResult.rows[0];
 
-      if (product.stock < item.quantity) {
-        throw new Error(`Nicht genügend Lagerbestand für Produkt "${product.name}". Verfügbar: ${product.stock}, angefordert: ${item.quantity}.`);
-      }
+        if (product.stock < item.quantity) {
+          const error = new Error(
+            `Nicht genügend Lagerbestand für Produkt "${product.name}". Verfügbar: ${product.stock}, angefordert: ${item.quantity}.`
+          );
+          error.status = 409;
+          throw error;
+        }
 
-      const actualPrice = productResult.rows[0].price;
+      const actualPrice = Number(product.price);
       calculatedTotal += actualPrice * item.quantity;
-      
-      // Eltesszük az adatokat memóriába, hogy később elmentsük őket
+
+      // save the item data later for insertion into order_items table
       itemsToInsert.push({
         productId: item.productId,
         quantity: item.quantity,
@@ -54,14 +78,16 @@ export const createOrder = async (req, res, next) => {
       });
     }
 
-    // 2. Fő rendelés (order) létrehozása
+    calculatedTotal = Number(calculatedTotal.toFixed(2));
+
+    // 2. main order insertion into the orders table
     const orderResult = await client.query(
       'INSERT INTO orders (user_id, total_price) VALUES ($1, $2) RETURNING id',
       [userId, calculatedTotal]
     );
     const orderId = orderResult.rows[0].id;
 
-    // 3. Rendelés tételek (order_items) mentése egyenként
+    // 3. order items (order_items) insertion
     for (const item of itemsToInsert) {
       await client.query(
         'INSERT INTO order_items (order_id, product_id, quantity, price) VALUES ($1, $2, $3, $4)',
@@ -74,30 +100,33 @@ export const createOrder = async (req, res, next) => {
       );
     }
 
-    await client.query('COMMIT'); // Minden sikeres! Ekkor íródik be ténylegesen az adatbázisba.
+    await client.query('COMMIT');
 
     res.status(201).json({
-      message: 'Bestellung erfolgreich abgeschlossen!',
-      orderId: orderId,
-      totalPrice: calculatedTotal
+      message: "Bestellung erfolgreich abgeschlossen!",
+      orderId,
+      totalPrice: calculatedTotal,
     });
 
   } catch (error) {
-    await client.query('ROLLBACK'); // Hiba történt! Visszavonunk mindent, hogy ne legyen hibás rendelés.
-    console.error("Order error:", error.message);
-    res.status(400).json({ message: error.message || "Fehler bei der Bestellung." });
+      await client.query("ROLLBACK");
+
+        if (error.status) {
+          return res.status(error.status).json({
+            message: error.message,
+          });
+        }
+
+        next(error);
   } finally {
-    client.release(); // Visszaadjuk a kapcsolatot
+    client.release();
   }
 };
 
-
-// Részlet a server/src/controllers/order.controller.js fájlból
 export const getMyOrders = async (req, res, next) => {
-  const userId = req.user.userId || req.user.id; 
+  const userId = req.user.userId; 
 
   try {
-    // Kibővített lekérdezés, ami a tételeket is lekéri képekkel együtt
     const result = await pool.query(
       `SELECT 
         o.id, 
@@ -109,7 +138,7 @@ export const getMyOrders = async (req, res, next) => {
             json_build_object(
               'productId', p.id,
               'name', p.name,
-              'image', p.image_url, -- Vagy ahogy az adatbázisodban hívják a kép oszlopot
+              'image', p.image_url,
               'price', oi.price,
               'quantity', oi.quantity
             )
@@ -126,7 +155,6 @@ export const getMyOrders = async (req, res, next) => {
 
     res.status(200).json(result.rows);
   } catch (error) {
-    console.error('Fehler beim Abrufen der Bestellungen:', error);
-    res.status(500).json({ message: 'Serverfehler beim Laden der Bestellungen.' });
+    next(error); // pass the error to the error handling middleware
   }
 };
