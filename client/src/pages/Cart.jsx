@@ -7,13 +7,19 @@ import { Link, useNavigate } from 'react-router-dom';
 export default function Cart() {
 
   const navigate = useNavigate();
-  const { cart, removeFromCart, clearCart, totalPrice, increaseQuantity, decreaseQuantity } = useCart();
+  const { cart, removeFromCart, clearCart, totalItems, totalPrice, increaseQuantity, decreaseQuantity } = useCart();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [orderMessage, setOrderMessage] = useState(null);
   const [orderError, setOrderError] = useState(null);
+  const token = sessionStorage.getItem("token");
 
   const handleCheckout = async () => {
     if (cart.length === 0) return;
+
+    if (!token) {
+      navigate("/login");
+      return;
+    }
 
     setIsSubmitting(true);
     setOrderMessage(null);
@@ -29,7 +35,6 @@ export default function Cart() {
         cartItems: formattedItems
       });
 
-      
       setOrderMessage(`Bestellung erfolgreich abgeschlossen! Gesamtsumme: ${response.data.totalPrice} € (Bestellnummer: ${response.data.orderId})`);
       
       clearCart();
@@ -48,30 +53,33 @@ export default function Cart() {
   };
 
 if (cart.length === 0) {
-    return (
-      <div className="order-message">
-        
-        {orderMessage && (
-          <div className="order-success-message">
-            <span className="order-message-icon">✅</span>
-            <strong>{orderMessage}</strong>
-            <div className="order-message-content">
-              Du wirst in Kürze zur Startseite weitergeleitet...
-            </div>
-          </div>
-        )}
+  return (
+    <div className="order-message">
+      {orderMessage ? (
+        <div className="order-success-message">
+          <span className="order-message-icon">✅</span>
+          <strong>{orderMessage}</strong>
 
-        <h2>Dein Warenkorb ist leer</h2>
-        <p className="empty-cart-message">Du hast noch keine Produkte in deinem Warenkorb hinzugefügt.</p>
-        
-        {!orderMessage && (
-          <Link to="/" className="primary-button" style={{textDecoration: 'none'}}>
+          <div className="order-message-content">
+            Du wirst in Kürze zur Startseite weitergeleitet...
+          </div>
+        </div>
+      ) : (
+        <>
+          <h2>Dein Warenkorb ist leer</h2>
+
+          <p className="empty-cart-message">
+            Du hast noch keine Produkte in deinem Warenkorb hinzugefügt.
+          </p>
+
+          <Link to="/" className="primary-button">
             Zu den Produkten
           </Link>
-        )}
-      </div>
-    );
-  }
+        </>
+      )}
+    </div>
+  );
+}
 
   return (
     <div className="cart-container">
@@ -87,17 +95,15 @@ if (cart.length === 0) {
 <div className="cart-items-container">
   {cart.map((item) => (
     <div key={item.id} className="cart-item">
-      
-      {/* Bal oldal: Termék adatok */}
       <div>
         <h3 className="cart-product-name" >{item.name}</h3>
         <p className="product-price-cart">Einzelpreis: €{item.price}</p>
         
-        {/* MENNYISÉG MÓDOSÍTÓ GOMBOK (- és +) */}
         <div className="quantity-controls">
           <button 
             onClick={() => decreaseQuantity(item.id)}
             className="quantity-button"
+            disabled={item.quantity <= 1}
           >
             -
           </button>
@@ -109,13 +115,13 @@ if (cart.length === 0) {
           <button 
             onClick={() => increaseQuantity(item.id)}
             className="quantity-button"
+            disabled={item.quantity >= item.stock}
           >
             +
           </button>
         </div>
       </div>
       
-      {/* Jobb oldal: Szép fix oszlopba rendezett ár és törlés */}
       <div className="cart-item-right">
         <span className="product-total-price">
           €{(item.price * item.quantity).toFixed(2)}
@@ -132,29 +138,33 @@ if (cart.length === 0) {
     </div>
   ))}
 </div>
-
       <div className="cart-summary">
         <div className="cart-summary-content">
           <h2 className="cart-summary-title">Bestellübersicht</h2>
-          <p className="cart-summary-text">Gesamtanzahl der Produkte: {cart.reduce((total, item) => total + item.quantity, 0)}</p>
+          <p className="cart-summary-text">Gesamtanzahl der Produkte: {totalItems}</p>
         
         <h2 className="item-total-price" >Gesamtsumme: €{totalPrice.toFixed(2)}</h2>
-          <button 
+         {token ? (
+            <button 
               onClick={handleCheckout} 
               disabled={isSubmitting || cart.length === 0}
               className="order-button"
-              style={{
-                background: isSubmitting ? '#ccc' : '#28a745',
-                cursor: isSubmitting ? 'not-allowed' : 'pointer',
-              }}
             >
               {isSubmitting ? 'Wird bearbeitet...' : 'Jetzt kaufen'}
             </button>
+            ) : (
+              <Link
+                to="/login"
+                className="order-button"
+              >
+                Einloggen und bestellen
+              </Link>
+            )}
             </div>
           <div className="cart-actions">
             <button 
               onClick={clearCart}
-              className="secondary-button" style={{ backgroundColor: 'red' }}
+              className="secondary-button clear-cart-button"
             >
               Warenkorb leeren
             </button>
