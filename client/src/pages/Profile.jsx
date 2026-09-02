@@ -2,12 +2,15 @@ import { useState, useEffect } from 'react';
 import api from '../services/api';
 import { useNavigate } from 'react-router-dom';
 
-const storedUser = sessionStorage.getItem('user');
-const user = storedUser ? JSON.parse(storedUser) : null;
+
 
 function Profile() {
+  const storedUser = sessionStorage.getItem('user');
+  const user = storedUser ? JSON.parse(storedUser) : null;
+
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -20,14 +23,11 @@ function Profile() {
       }
 
       try {
-        const response = await api.get('/orders/my-orders');
+        const response = await api.get("/orders/my-orders");
         setOrders(response.data);
       } catch (error) {
-        console.error('Fehler beim Laden der Bestellungen:', error);
-        if (error.response?.status === 401) {
-          sessionStorage.removeItem('token');
-          navigate('/login');
-        }
+        console.error("Fehler beim Laden der Bestellungen:", error);
+        setError("Die Bestellungen konnten nicht geladen werden.");
       } finally {
         setLoading(false);
       }
@@ -47,7 +47,6 @@ return (
 
     <div className="profile-header">
       <h1>{user ? user.full_name : 'Mein Profil'}</h1>
-
       <button
         onClick={handleLogout}
         className="logout-button"
@@ -59,16 +58,16 @@ return (
     <h2>Meine Bestellungen</h2>
 
     {loading ? (
-      <p>Bestellungen werden geladen...</p>
-    ) : orders.length === 0 ? (
-      <p className="no-orders">
-        Du hast noch keine Bestellungen getätigt.
-      </p>
+        <p>Bestellungen werden geladen...</p>
+      ) : error ? (
+        <p className="profile-error">{error}</p>
+      ) : orders.length === 0 ? (
+        <p className="no-orders">
+          Du hast noch keine Bestellungen getätigt.
+        </p>
     ) : (
       orders.map((order) => (
         <div key={order.id} className="order-card">
-
-          {/* Rendelés fejléce */}
           <div className="order-header">
             <h3 className="order-title">
               Bestellung #{order.id}
@@ -80,7 +79,6 @@ return (
             </span>
           </div>
 
-          {/* Termékek */}
           <div className="order-items">
             {order.items.map((item) => (
               <div
@@ -106,13 +104,12 @@ return (
 
                 <div className="order-item-total">
                   €
-                  {(item.quantity * item.price).toFixed(2)}
+                  {(item.quantity * Number(item.price)).toFixed(2)}
                 </div>
               </div>
             ))}
           </div>
 
-          {/* Rendelés lábléce */}
           <div className="order-footer">
 
             <span className="order-status">
