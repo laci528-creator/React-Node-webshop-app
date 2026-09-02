@@ -1,14 +1,16 @@
 import jwt from 'jsonwebtoken';
 
-// JWT token hitelesítő middleware
+// authenticateToken middleware to verify JWT token
 export const authenticateToken = (req, res, next) => {
   const authHeader = req.headers['authorization'];
-  // Az "Bearer TOKEN" formátumból kinyerjük a tokent
-  const token = authHeader && authHeader.split(' ')[1];
-
-  if (!token) {
-    return res.status(401).json({ message: 'Fehlendes Token, Zugriff verweigert!' });
+  
+  if (!authHeader?.startsWith('Bearer ')) {
+    return res.status(401).json({ 
+      message: 'Fehlendes Token, Zugriff verweigert!' 
+    });
   }
+
+  const token = authHeader.slice(7);
 
   jwt.verify(token, process.env.JWT_SECRET, (err, decodedUser) => {
     if (err) {
@@ -20,6 +22,7 @@ export const authenticateToken = (req, res, next) => {
   });
 };
 
+// Allow only admin users to access certain routes
 export const isAdmin = (req, res, next) => {
 
   if (req.user?.role !== 'admin') {

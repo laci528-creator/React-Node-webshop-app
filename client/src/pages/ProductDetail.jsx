@@ -22,7 +22,6 @@ function ProductDetail() {
   }, 2000);
 };
 
-
   useEffect(() => {
     const fetchProduct = async () => {
       try {

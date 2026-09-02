@@ -1,7 +1,7 @@
 {
   "name": "ecommerce-server",
   "version": "1.0.0",
-  "description": "E-commerce Node.js + Express backend szerver",
+  "description": "Node.js and Express backend for a full-stack e-commerce application",
   "type": "module",
   "main": "src/server.js",
   "scripts": {

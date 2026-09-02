@@ -2,6 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
 import dotenv from 'dotenv';
+
 import authRoutes from './routes/auth.routes.js';
 import productRoutes from './routes/product.routes.js';
 import orderRoutes from './routes/orders.js';
@@ -9,9 +10,9 @@ import orderRoutes from './routes/orders.js';
 dotenv.config();
 
 const app = express();
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT;
 
-// --- MIDDLEWARE-EK ---
+// --- MIDDLEWARE ---
 app.use(helmet());
 app.use(
   cors({
@@ -19,7 +20,6 @@ app.use(
   })
 );
 
-// JSON parser minden más végponthoz
 app.use(express.json());
 
 app.get('/api/v1/health', (req, res) => {
@@ -30,12 +30,26 @@ app.use('/api/v1/auth', authRoutes);
 app.use('/api/v1/products', productRoutes);
 app.use('/api/v1/orders', orderRoutes);
 
-// --- GLOBÁLIS HIBAKEZELŐ ---
+app.use((req, res) => {
+  res.status(404).json({
+    error: {
+      message: "Route nicht gefunden.",
+    },
+  });
+});
+
+// --- GLOBAL ERROR HANDLER ---
 app.use((err, req, res, next) => {
   console.error('Fehler aufgetreten:', err.stack);
-  res.status(err.status || 500).json({
+
+  const status = err.status || 500;
+
+  res.status(status).json({
     error: {
-      message: err.message || 'Ein interner Serverfehler ist aufgetreten.',
+      message: 
+        status === 500
+          ? 'Ein interner Serverfehler ist aufgetreten.'
+          : err.message,
     },
   });
 });
