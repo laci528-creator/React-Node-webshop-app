@@ -1,3 +1,5 @@
+-- Sample product data for local development and testing
+
 INSERT INTO products (
     name,
     description,
