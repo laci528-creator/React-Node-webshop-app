@@ -7,10 +7,16 @@ export function CartProvider({ children }) {
   const [cart, setCart] = useState(() => {
     try {
       const savedCart = localStorage.getItem('cart');
-      // Ha volt mentett kosár, visszafejtjük JSON-ből, különben üres tömb
-      return savedCart ? JSON.parse(savedCart) : [];
+      // If a saved cart exists in localStorage, parse and return it; otherwise return an empty array
+          if (!savedCart) {
+            return [];
+          }
+
+      const parsedCart = JSON.parse(savedCart);
+
+      return Array.isArray(parsedCart) ? parsedCart : [];
     } catch (error) {
-      console.error('Fehler beim Laden des Warenkorb:', error);
+      console.error('Fehler beim Laden des Warenkorbs:', error);
       return [];
     }
   });
