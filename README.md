@@ -2,6 +2,8 @@
 
 A full-stack e-commerce portfolio project built with React, Node.js, Express and PostgreSQL.
 
+Live Demo: [React Node Webshop App](https://react-node-webshop-app.vercel.app/)  
+
 This README is available in English and German.
 
 ---
@@ -23,9 +25,12 @@ The project focuses on combining frontend development, REST API communication, a
 * Display products in a responsive product catalogue
 * View detailed information about individual products
 * Search products by name or description
-* Sort products by price
 * Display product availability and stock
 * Disable purchasing for out-of-stock products
+* Debounced product search
+* Sort products by price
+* Visual feedback when adding products to the cart
+* Prevent adding quantities beyond available stock
 
 ### Shopping Cart
 
@@ -34,14 +39,13 @@ The project focuses on combining frontend development, REST API communication, a
 * Remove individual products
 * Clear the complete cart
 * Automatic calculation of the total price
-* Prevent quantities from exceeding available stock
 * Persist the shopping cart in LocalStorage
 
 ### Authentication
 
 * User registration
 * User login
-* Password hashing with bcrypt
+* Password hashing with bcryptjs
 * JWT-based authentication
 * Protected routes
 * Role-based authorization
@@ -81,6 +85,7 @@ The project focuses on combining frontend development, REST API communication, a
 * SessionStorage
 * HTML5
 * CSS3
+* Responsive design
 
 ### Backend
 
@@ -125,37 +130,67 @@ The checkout currently represents a demo order process and does not process real
 
 Clone the repository:
 
+```bash
 git clone https://github.com/laci528-creator/React-Node-webshop-app.git
+```
 
 Install the root dependencies:
 
+```bash
 npm install
+```
 
 Install the frontend dependencies:
 
+```bash
 cd client
 npm install
+```
 
 Install the backend dependencies:
 
+```bash
 cd ../server
 npm install
+```
 
 Create the required .env files based on the included .env.example files and configure the PostgreSQL database.
 
 The database structure can be created using:
 
-server/database/init.sql
+`server/database/init.sql`
+
+Optional sample product data can be inserted using:
+
+`server/database/seed.sql`
 
 Start both the frontend and backend from the project root:
 
+```bash
 npm run dev
+```
 
-## Live Demo
+## Screenshots
 
-https://react-node-webshop-app.vercel.app
+### Product Catalogue
+
+<img src="./screenshots/product-catalogue.png" alt="Product catalogue" width="850">
+
+### Shopping Cart
+
+<img src="./screenshots/cart.png" alt="Shopping cart" width="850">
+
+### User Profile
+
+<img src="./screenshots/profile.png" alt="User profile and order history" width="850">
+
+### Admin Dashboard
+
+<img src="./screenshots/admin-dashboard.png" alt="Admin product management" width="850">
 
 ---
+
+
 
 # Deutsch
 
@@ -174,9 +209,12 @@ Der Schwerpunkt des Projekts liegt auf der Verbindung von Frontend-Entwicklung, 
 * Anzeige der Produkte in einem responsiven Produktkatalog
 * Detailansicht einzelner Produkte
 * Suche nach Produktname oder Beschreibung
-* Sortierung der Produkte nach Preis
 * Anzeige des aktuellen Lagerbestands
 * Deaktivierung des Kaufs bei ausverkauften Produkten
+* Produktsuche mit Debouncing
+* Sortierung der Produkte nach Preis
+* Visuelles Feedback beim Hinzufügen von Produkten zum Warenkorb
+* Begrenzung der Produktmenge auf den verfügbaren Lagerbestand
 
 ### Warenkorb
 
@@ -185,14 +223,13 @@ Der Schwerpunkt des Projekts liegt auf der Verbindung von Frontend-Entwicklung, 
 * Einzelne Produkte entfernen
 * Gesamten Warenkorb leeren
 * Automatische Berechnung des Gesamtpreises
-* Begrenzung der Produktmenge auf den verfügbaren Lagerbestand
 * Speicherung des Warenkorbs im LocalStorage
 
 ### Authentifizierung
 
 * Benutzerregistrierung
 * Benutzeranmeldung
-* Passwort-Hashing mit bcrypt
+* Passwort-Hashing mit bcryptjs
 * JWT-basierte Authentifizierung
 * Geschützte Routen
 * Rollenbasierte Zugriffskontrolle
@@ -232,6 +269,7 @@ Der Schwerpunkt des Projekts liegt auf der Verbindung von Frontend-Entwicklung, 
 * SessionStorage
 * HTML5
 * CSS3
+* Responsives Design
 
 ### Backend
 
@@ -276,32 +314,42 @@ Der aktuelle Checkout stellt einen Demo-Bestellprozess dar und verarbeitet keine
 
 Repository klonen:
 
+```bash
 git clone https://github.com/laci528-creator/React-Node-webshop-app.git
+```
 
 Abhängigkeiten im Hauptverzeichnis installieren:
 
+```bash
 npm install
+```
 
 Frontend-Abhängigkeiten installieren:
 
+```bash
 cd client
 npm install
+```
 
 Backend-Abhängigkeiten installieren:
 
+```bash
 cd ../server
 npm install
+```
 
 Die benötigten .env -Dateien anhand der vorhandenen .env.example -Dateien erstellen und die PostgreSQL-Datenbank konfigurieren.
 
 Die Datenbankstruktur kann mit folgender Datei erstellt werden:
 
-server/database/init.sql
+`server/database/init.sql`
+
+Optionale Beispieldaten können anschließend mit folgender Datei eingefügt werden:
+
+`server/database/seed.sql`
 
 Frontend und Backend anschließend aus dem Hauptverzeichnis gemeinsam starten:
 
+```bash
 npm run dev
-
-## Live Demo
-
-https://react-node-webshop-app.vercel.app
+```

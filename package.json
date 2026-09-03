@@ -1,21 +1,17 @@
 {
   "name": "webshop-app",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-"scripts": {
-  "dev:server": "npm run dev --prefix server",
-  "dev:client": "npm run dev --prefix client",
-  "dev": "concurrently \"npm run dev:server\" \"npm run dev:client\""
-},
+  "description": "Full-stack e-commerce application built with React, Node.js, Express and PostgreSQL",
+  "scripts": {
+    "dev:server": "npm run dev --prefix server",
+    "dev:client": "npm run dev --prefix client",
+    "dev": "concurrently \"npm run dev:server\" \"npm run dev:client\""
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/laci528-creator/React-Node-webshop-app.git"
   },
-  "keywords": [],
-  "author": "",
   "license": "ISC",
-  "type": "commonjs",
   "bugs": {
     "url": "https://github.com/laci528-creator/React-Node-webshop-app/issues"
   },
