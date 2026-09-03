@@ -4,7 +4,7 @@ import api from '../services/api';
 import { Link } from 'react-router-dom';
 import { useCart } from '../context/useCart';
 
-export default function Products() {
+export default function Home() {
   const [products, setProducts] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [sortOrder, setSortOrder] = useState('');
