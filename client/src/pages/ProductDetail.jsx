@@ -6,34 +6,55 @@ import { useCart } from '../context/useCart';
 function ProductDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { addToCart } = useCart(); 
+  const { cart, addToCart } = useCart(); 
   const [message, setMessage] = useState('');
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [messageType, setMessageType] = useState("success");
 
-  const handleAddToCart = (product) => {
-  addToCart(product);
+const handleAddToCart = (product) => {
+  const cartItem = cart.find((item) => item.id === product.id);
 
-  setMessage(`${product.name} wurde zum Warenkorb hinzugefügt.`);
+  if (cartItem && cartItem.quantity >= product.stock) {
+    setMessage(
+      `Die maximale verfügbare Menge von ${product.name} ist bereits im Warenkorb.`
+    );
+    setMessageType("error");
+  } else {
+    addToCart(product);
+    setMessage(`${product.name} wurde zum Warenkorb hinzugefügt.`);
+    setMessageType("success");
+  }
 
   setTimeout(() => {
-    setMessage('');
-  }, 2000);
+    setMessage("");
+  }, 3000);
 };
 
   useEffect(() => {
     const fetchProduct = async () => {
       try {
-        const response = await api.get(`/products/${id}`);
-        setProduct(response.data);
-        setLoading(false);
-      } catch (err) {
-        console.error('Fehler beim Laden des Produkts:', err);
-        setError('Produkt nicht gefunden oder Serverfehler.');
+          setLoading(true);
+          setError(null);
+          setProduct(null);
+
+          const response = await api.get(`/products/${id}`);
+          setProduct(response.data);
+        } catch (err) {
+          console.error('Fehler beim Laden des Produkts:', err);
+
+          if (err.response?.status === 404) {
+            setError('Produkt nicht gefunden.');
+          } else {
+            setError('Das Produkt konnte nicht geladen werden.');
+          }
+        }
+        finally {
         setLoading(false);
       }
     };
+
     fetchProduct();
   }, [id]);
 
@@ -43,16 +64,23 @@ function ProductDetail() {
 
   return (
     <div className="product-detail-container">
-      {message && (
-  <div className="cart-toast">
-    ✓ {message}
-  </div>
-)}
-      <button 
+        {message && (
+          <div
+            className={
+              messageType === "success"
+                ? "cart-toast cart-toast-success"
+                : "cart-toast cart-toast-error"
+            }
+          >
+            {messageType === "success" ? "✓" : "✗"} {message}
+          </div>
+        )}
+      <button
+        type="button" 
         onClick={() => navigate(-1)} 
         className="btn-back"
       >
-      Zurück zum Produktliste
+      Zurück zur Produktliste
       </button>
       
       <div className="product-layout">
@@ -71,7 +99,7 @@ function ProductDetail() {
           </p>
           
           <p className="product-price-detail">
-            €{product.price}
+            €{Number(product.price).toFixed(2)}
           </p>
           
           <p className="product-detail-description">
@@ -83,7 +111,8 @@ function ProductDetail() {
           </p>
           
           {product.stock > 0 ? (
-            <button 
+            <button
+              type="button"
               onClick={() => handleAddToCart(product)}
               className="btn-add-to-cart"
             >
