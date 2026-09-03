@@ -30,7 +30,7 @@ const handleAddToCart = (product) => {
 
   setTimeout(() => {
       setMessage('');
-    }, 3000);
+    }, 700);
   };
 
   useEffect(() => {
