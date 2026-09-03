@@ -179,7 +179,7 @@ npm run dev
 ### Shopping Cart
 
 <img src="./screenshots/cart.png" alt="Shopping cart" width="850">
-
+A
 ### User Profile
 
 <img src="./screenshots/profile.png" alt="User profile and order history" width="850">
