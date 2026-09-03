@@ -13,7 +13,6 @@ import Profile from './pages/Profile';
 import AdminDashboard from './pages/AdminDashboard';
 import NotFound from "./pages/NotFound";
 
-import './index.css';
 
 function App() {
   return (
