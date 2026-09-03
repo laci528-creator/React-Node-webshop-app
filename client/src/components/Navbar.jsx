@@ -5,24 +5,21 @@ function Navbar() {
   const navigate = useNavigate();
   const { totalItems } = useCart();
 
-  // Token és felhasználó kiolvasása a sessionStorage-ból
   const token = sessionStorage.getItem('token');
   const storedUser = sessionStorage.getItem('user');
   
-  // Átalakítjuk a tárolt JSON stringet JavaScript objektummá
   const user = storedUser ? JSON.parse(storedUser) : null;
 
-  // Kijelentkezés kezelése
   const handleLogout = () => {
     sessionStorage.removeItem('token');
-    sessionStorage.removeItem('user'); // A user adatokat is töröljük!
+    sessionStorage.removeItem('user');
     navigate('/login');
   };
 
   return (
     <nav className="navbar">
-      <h2 style={{ margin: 0 }}>
-        <Link to="/" className="webshop-link ">Webshop</Link>
+      <h2 className="webshop-title">
+        <Link to="/" className="webshop-link">Webshop</Link>
       </h2>
 
       <div className="nav-links">
@@ -31,7 +28,7 @@ function Navbar() {
           <Link to="/admin" className="nav-link-a">Admin Seite</Link>
         )}
 
-        <Link to="/cart" className="nav-link-a" style={{ position: 'relative' }}>
+        <Link to="/cart" className="nav-link-a cart-link">
           🛒 Warenkorb {totalItems > 0 && (
             <span className="cart-item-count">
               {totalItems}
@@ -51,7 +48,8 @@ function Navbar() {
               Hallo, <strong>{user?.full_name || 'Benutzer'}</strong>!
             </span>
 
-            <button 
+            <button
+              type="button"
               onClick={handleLogout}
               className="logout-button"
             >

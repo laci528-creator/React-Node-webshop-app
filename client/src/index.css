@@ -256,6 +256,13 @@ body {
   border: 1px solid #ccc;
 }
 
+.form-column {
+  flex: 1;
+}
+
+.form-column-wide {
+  flex: 2;
+}
 
 /* --- Cart Page Styles --- */
 
@@ -697,6 +704,10 @@ body {
 
 /* --- Navbar Styles --- */
 
+.webshop-title {
+  margin: 0;
+}
+
 .navbar {
       display: flex;
       justify-content: space-between;
@@ -710,6 +721,10 @@ body {
 .webshop-link {
       text-decoration: none;
       color: #fff;
+}
+
+.cart-link {
+  position: relative;
 }
 
 .nav-links {
