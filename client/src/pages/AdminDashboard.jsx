@@ -1,11 +1,7 @@
 import { useState } from 'react';
-import { Navigate } from "react-router-dom";
 import api from '../services/api';
 
 export default function AdminDashboard() {
-  const storedUser = sessionStorage.getItem("user");
-  const user = storedUser ? JSON.parse(storedUser) : null;
-
   const [formData, setFormData] = useState({
     name: '',
     description: '',
@@ -18,10 +14,6 @@ export default function AdminDashboard() {
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
-
-  if (user?.role !== "admin") {
-    return <Navigate to="/" replace />;
-  }
 
   // handle input changes
   const handleChange = (e) => {

@@ -825,3 +825,24 @@ body {
   }
 }
 
+/* --- Not Found Page Styles --- */
+
+.not-found-page {
+  max-width: 600px;
+  margin: 80px auto;
+  padding: 30px;
+  text-align: center;
+}
+
+.not-found-page h1 {
+  font-size: 5rem;
+  margin-bottom: 0;
+}
+
+.not-found-page h2 {
+  margin-top: 0;
+}
+
+.not-found-page p {
+  margin-bottom: 30px;
+}
