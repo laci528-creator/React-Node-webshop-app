@@ -3,29 +3,38 @@ import { useNavigate } from 'react-router-dom';
 import api from '../services/api';
 
 function Register() {
-  // Űrlap állapotok (state)
   const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   
   const navigate = useNavigate();
 
-  // Regisztráció elküldése a szervernek
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError(null);
+    setIsSubmitting(true);
+
+    const trimmedFullName = fullName.trim();
+    const trimmedEmail = email.trim();
 
     try {
-      // Meghívjuk a POST /api/v1/auth/register végpontot
-      await api.post('/auth/register', { full_name: fullName, email, password });
+      await api.post('/auth/register', { 
+        full_name: trimmedFullName, 
+        email: trimmedEmail, 
+        password,
+      });
 
-      // Sikeres regisztráció után átirányítjuk a felhasználót a bejelentkezés oldalra
       navigate('/login');
     } catch (err) {
       console.error('Registrierungsfehler:', err);
-      // Hibaüzenet megjelenítése
-      setError(err.response?.data?.message || 'Registrierung fehlgeschlagen!');
+      setError(
+        err.response?.data?.message || 
+        'Registrierung fehlgeschlagen!'
+      );
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -38,34 +47,41 @@ function Register() {
       <form onSubmit={handleSubmit} className="login-form">
         
         <div>
-          <label className="form-label">Benutzername:</label>
+          <label htmlFor="fullName" className="form-label">Name:</label>
           <input 
+            id="fullName"
             type="text" 
-            value={fullName} 
+            value={fullName}
             onChange={(e) => setFullName(e.target.value)} 
             required
+            autoComplete="name"
             className="form-input"
           />
         </div>
 
         <div>
-          <label className="form-label">E-Mail-Adresse:</label>
+          <label htmlFor="email" className="form-label">E-Mail-Adresse:</label>
           <input 
+            id="email"
             type="email" 
             value={email} 
             onChange={(e) => setEmail(e.target.value)} 
             required
+            autoComplete="email"
             className="form-input"
           />
         </div>
 
         <div>
-          <label className="form-label">Passwort:</label>
-          <input 
+          <label htmlFor="password" className="form-label">Passwort:</label>
+          <input
+            id="password"
             type="password" 
+            minLength={8}
             value={password} 
             onChange={(e) => setPassword(e.target.value)} 
             required
+            autoComplete="new-password"
             className="form-input"
           />
         </div>
@@ -73,8 +89,9 @@ function Register() {
         <button 
           type="submit" 
           className="login-button"
+          disabled={isSubmitting}
         >
-          Konto erstellen
+          {isSubmitting ? 'Konto wird erstellt...' : 'Konto erstellen'}
         </button>
       </form>
     </div>
