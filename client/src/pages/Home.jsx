@@ -7,40 +7,49 @@ import { useCart } from '../context/useCart';
 export default function Products() {
   const [products, setProducts] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
-  const [sortOrder, setSortOrder] = useState(''); // <--- ÚJ: Rendezési állapot
+  const [sortOrder, setSortOrder] = useState('');
   const [loading, setLoading] = useState(true);
-  const { addToCart } = useCart();
+  const { cart, addToCart } = useCart();
+  const [error, setError] = useState('');
   const [message, setMessage] = useState('');
+  const [messageType, setMessageType] = useState("success");
 
 const handleAddToCart = (product) => {
-  addToCart(product);
+  const cartItem = cart.find((item) => item.id === product.id);
 
-  setMessage(`${product.name} wurde zum Warenkorb hinzugefügt.`);
+   if (cartItem && cartItem.quantity >= product.stock) {
+    setMessage(
+      `Die maximale verfügbare Menge von ${product.name} ist bereits im Warenkorb.`
+    );
+    setMessageType("error");
+  } else {
+      addToCart(product);
+      setMessage(`${product.name} wurde zum Warenkorb hinzugefügt.`);
+      setMessageType("success");
+    }
 
   setTimeout(() => {
-    setMessage('');
-  }, 2000);
-};
+      setMessage('');
+    }, 3000);
+  };
 
   useEffect(() => {
     const fetchProducts = async () => {
       try {
         setLoading(true);
+        setError('');
 
-        // Dinamikusan összerakjuk a query paramétereket
-        const params = new URLSearchParams();
-        if (searchQuery) params.append('search', searchQuery);
-        if (sortOrder) params.append('sort', sortOrder);
+        const params = {};
+        const trimmedSearchQuery = searchQuery.trim();
 
-        const endpoint = `/products?${params.toString()}`;
-        const response = await api.get(endpoint);
+        if (trimmedSearchQuery) params.search = trimmedSearchQuery;
+        if (sortOrder) params.sort = sortOrder;
+
+        const response = await api.get('/products', { params });
         setProducts(response.data);
       } catch (error) {
-        if (error.response && error.response.status === 404) {
-          setProducts([]);
-        } else {
-          console.error('Fehler beim Laden der Produkte:', error);
-        }
+        console.error("Fehler beim Laden der Produkte:", error);
+        setError("Die Produkte konnten nicht geladen werden.");
       } finally {
         setLoading(false);
       }
@@ -51,13 +60,16 @@ const handleAddToCart = (product) => {
     }, 300);
 
     return () => clearTimeout(timeoutId);
-  }, [searchQuery, sortOrder]); // <--- Figyeljük a sortOrder változását is!
+  }, [searchQuery, sortOrder]);
 
   return (
     <div className="home-page">
       {message && (
-        <div className="cart-toast">
-          ✓ {message}
+        <div className={ messageType === "success"
+          ? "cart-toast cart-toast-success"
+          : "cart-toast cart-toast-error"
+        }>
+          {messageType === "success" ? "✓" : "✗"} {message}
         </div>
       )}
       <h1>Webshop Produktkatalog</h1>
@@ -71,7 +83,6 @@ const handleAddToCart = (product) => {
           className="search-input"
         />
 
-        {/* --- ÚJ: RENDEZÉS LEGÖRDÜLŐ MENÜ --- */}
         <select 
           value={sortOrder}
           onChange={(e) => setSortOrder(e.target.value)}
@@ -83,9 +94,10 @@ const handleAddToCart = (product) => {
         </select>
       </div>
 
-      {/* --- TERMÉKEK LISTÁJA --- */}
       {loading ? (
-        <p style={{ textAlign: 'center' }}>Produkte werden geladen...</p>
+        <p className="loading-message">Produkte werden geladen...</p>
+      ) : error ? (
+        <p className="error-message">{error}</p>
       ) : products.length === 0 ? (
         <p className="no-products-message">
           Keine Produkte gefunden, die deinen Kriterien entsprechen.
@@ -120,7 +132,8 @@ const handleAddToCart = (product) => {
 
               <div className="product-actions-buttons">                                                                                                                                                                                                                                              
                {product.stock > 0 ? (
-                <button 
+                <button
+                  type="button"
                   onClick={() => handleAddToCart(product)}
                   className="primary-button"
                 >

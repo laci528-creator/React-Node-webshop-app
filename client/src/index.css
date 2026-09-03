@@ -13,6 +13,19 @@ body {
 
 /* --- Home Page Styles --- */
 
+.loading-message {
+  text-align: center;
+  font-size: 1.2rem;
+  color: #7f8c8d;
+  margin-top: 40px;
+}
+
+.error-message {
+  text-align: center;
+  color: #e74c3c;
+  margin-top: 40px;
+}
+
 .home-page {
   max-width: 1200px;
   margin: 40px auto;
@@ -154,6 +167,28 @@ body {
   text-decoration: none;
   font-weight: bold;
   font-size: 0.9rem;
+}
+
+.cart-toast {
+  position: fixed;
+  top: 80px;
+  right: 20px;
+  z-index: 1000;
+  margin-bottom: 20px;
+  padding: 14px 20px;
+  border-radius: 6px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  font-weight: bold;
+}
+
+.cart-toast-success {
+  background-color: #d1e7dd;
+  color: #0f5132;
+}
+
+.cart-toast-error {
+  background-color: #fff3cd;
+  color: #a94c19;
 }
 
 /* --- Login and Register Page Styles --- */
@@ -453,23 +488,6 @@ body {
 
 /* --- Product Detail Page Styles --- */
 
-.cart-toast {
-  align-items: center;
-  position: fixed;
-  top: 80px;
-  right: 20px;
-  z-index: 1000;
-  margin-bottom: 20px;
-
-  padding: 14px 20px;
-  background-color: #28a745;
-  color: white;
-
-  border-radius: 6px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-
-  font-weight: bold;
-}
 
 .product-detail-container {
   max-width: 800px;
