@@ -1,4 +1,4 @@
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { useCart } from '../context/useCart';
 
 function Navbar() {
@@ -29,23 +29,50 @@ function Navbar() {
       </Link>
 
       <div className="nav-links">
-        <Link to="/" className="nav-link-a">Produkte</Link>
-        {user?.role === 'admin' && (
-          <Link to="/admin" className="nav-link-a">Admin Seite</Link>
+       <NavLink
+          to="/"
+          end
+          className={({ isActive }) =>
+            `nav-link-a${isActive ? " active" : ""}`
+          }
+        >
+          Produkte
+        </NavLink>
+
+        {user?.role === "admin" && (
+          <NavLink
+            to="/admin"
+            className={({ isActive }) =>
+              `nav-link-a${isActive ? " active" : ""}`
+            }
+          >
+            Admin Seite
+          </NavLink>
         )}
 
-        <Link to="/cart" className="nav-link-a cart-link">
-          🛒 Warenkorb {totalItems > 0 && (
+        <NavLink
+          to="/cart"
+          className={({ isActive }) =>
+            `nav-link-a cart-link${isActive ? " active" : ""}`
+          }
+        >
+          🛒 Warenkorb
+          {totalItems > 0 && (
             <span className="cart-item-count">
               {totalItems}
             </span>
           )}
-        </Link>
+        </NavLink>
 
         {token && (
-          <Link to="/profile" className="nav-link-a">
+          <NavLink
+            to="/profile"
+            className={({ isActive }) =>
+              `nav-link-a${isActive ? " active" : ""}`
+            }
+          >
             Mein Profil
-          </Link>
+          </NavLink>
         )}
 
         {token ? (

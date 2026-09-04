@@ -850,6 +850,17 @@ body {
   color: #fff;
   text-decoration: none;
   font-weight: 500;
+
+  padding-bottom: 4px;
+  border-bottom: 2px solid transparent;
+}
+
+.nav-link-a:hover {
+  border-bottom-color: rgba(255, 255, 255, 0.6);
+}
+
+.nav-link-a.active {
+  border-bottom-color: #fff;
 }
 
 .cart-item-count {
@@ -911,6 +922,10 @@ body {
 
     text-align: center;
     border-bottom: 1px solid rgba(255, 255, 255, 0.35);
+  }
+
+  .nav-links > a.active {
+    border-bottom: 2px solid #fff;
   }
 
   .user-info {
