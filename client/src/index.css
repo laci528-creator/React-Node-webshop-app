@@ -961,4 +961,26 @@ body {
     flex-direction: column;
     gap: 4px;
   }
+    .footer-separator {
+    display: none;
+  }
+}
+
+.portfolio-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 8px;
+
+  color: #fff;
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: 600;
+
+  opacity: 0.9;
+}
+
+.portfolio-link:hover {
+  opacity: 1;
+  text-decoration: underline;
 }
