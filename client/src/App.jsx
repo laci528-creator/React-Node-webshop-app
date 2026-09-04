@@ -12,17 +12,19 @@ import Cart from './pages/Cart';
 import Profile from './pages/Profile';
 import AdminDashboard from './pages/AdminDashboard';
 import NotFound from "./pages/NotFound";
+import Footer from './components/Footer';
 
 
 function App() {
   return (
     <CartProvider>
-      <div>
+      <div className="app">
         <Navbar />
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
+        <main className="main-content">
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
           <Route path="/product/:id" element={<ProductDetail />} />
           <Route path="/cart" element={<Cart />} />
           <Route 
@@ -43,6 +45,8 @@ function App() {
           />
             <Route path="*" element={<NotFound />} />
         </Routes>
+        </main>
+        <Footer />
       </div>
     </CartProvider>
   );

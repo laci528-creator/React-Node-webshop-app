@@ -923,3 +923,42 @@ body {
 .not-found-page p {
   margin-bottom: 30px;
 }
+
+/* --- Footer Styles --- */
+
+.app {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.main-content {
+  flex: 1;
+}
+
+.footer {
+  padding: 18px 20px;
+  text-align: center;
+  background: linear-gradient(
+    240deg,
+    color-mix(in srgb, var(--primary) 50%, transparent),
+    color-mix(in srgb, var(--secondary) 50%, transparent)
+  );
+  
+  color: #fff;
+  font-size: 0.9rem;
+}
+
+.footer-text {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin: 0;
+}
+
+@media (max-width: 600px) {
+  .footer-text {
+    flex-direction: column;
+    gap: 4px;
+  }
+}
