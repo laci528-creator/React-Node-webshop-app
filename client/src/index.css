@@ -78,7 +78,7 @@ body {
 
 .home-page {
   max-width: 1200px;
-  margin: 40px auto;
+  margin: 0 auto;
   padding: 20px;
   font-family: sans-serif;
 }
@@ -796,15 +796,10 @@ body {
 
 /* --- Navbar Styles --- */
 
-.webshop-title {
-  margin: 0;
-}
-
 .navbar {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 15px 30px;
   background: linear-gradient(
     90deg,
     var(--primary),
@@ -814,9 +809,31 @@ body {
   box-shadow: var(--shadow);
 }
 
-.webshop-link {
-  text-decoration: none;
+.navbar-content {
+  width: min(1200px, 90%);
+  margin: 0 auto;
+  padding: 10px 20px;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.webshop-brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
   color: #fff;
+  text-decoration: none;
+  font-size: 1.3rem;
+  font-weight: 700;
+}
+
+.nav-logo {
+  width: 48px;
+  height: 48px;
+  object-fit: contain;
 }
 
 .cart-link {
@@ -856,49 +873,60 @@ body {
 }
 
 @media (max-width: 768px) {
-  .navbar {
-    flex-direction: column;
-    align-items: stretch;
+   .navbar-content {
+    width: 100%;
     padding: 10px 20px;
-  }
 
-  .nav-links {
-    display: flex;
     flex-direction: column;
-    width: 100%;
-    gap: 0.5rem;
-  }
-
-  .nav-links a,
-  .nav-links button {
-    width: 100%;
-    margin: 5px 0;
-    text-align: center;
-    padding: 0.5rem 0;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.35);
-  }
-  .user-info {
-    flex-direction: column;
-    justify-content: center;
-    margin-top: 6px;
-  }
-  .cart-actions {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
     gap: 10px;
   }
 
-  .cart-actions .secondary-button{
-    width: 100%;
+  .webshop-brand {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-size: 1.1rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.35);
+    padding-bottom: 8px;
   }
 
-  .cart-toast {
-    top: 20px;
-    left: 20px;
-    right: 20px;
+  .nav-logo {
+    width: 40px;
+    height: 40px;
+  }
+
+  .nav-links {
+    width: 100%;
+
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+  }
+
+  .nav-links > a {
+    width: 100%;
+    margin: 0;
+    padding: 0.6rem;
 
     text-align: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.35);
+  }
+
+  .user-info {
+    grid-column: 1 / -1;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+
+    margin-top: 4px;
+  }
+
+  .logout-button {
+    width: 100%;
+    max-width: 220px;
   }
 }
 
@@ -933,6 +961,7 @@ body {
 }
 
 .main-content {
+
   flex: 1;
 }
 

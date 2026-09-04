@@ -18,9 +18,15 @@ function Navbar() {
 
   return (
     <nav className="navbar">
-      <h2 className="webshop-title">
-        <Link to="/" className="webshop-link">Webshop</Link>
-      </h2>
+      <div className="navbar-content">
+      <Link to="/" className="webshop-brand">
+        <img
+          src="/favicon_webshop.png"
+          alt=""
+          className="nav-logo"
+        />
+        <span>Webshop</span>
+      </Link>
 
       <div className="nav-links">
         <Link to="/" className="nav-link-a">Produkte</Link>
@@ -62,6 +68,7 @@ function Navbar() {
             <Link to="/register" className="nav-link-a">Registrieren</Link>
           </>
         )}
+      </div>
       </div>
     </nav>
   );
