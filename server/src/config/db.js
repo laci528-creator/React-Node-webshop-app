@@ -5,6 +5,8 @@ dotenv.config();
 
 const { Pool } = pg;
 
+const isNeon = process.env.DB_HOST?.includes(".neon.tech");
+
 // PostgreSQL database connection configuration
 const pool = new Pool({
   user: process.env.DB_USER || 'postgres',
@@ -14,6 +16,13 @@ const pool = new Pool({
   port: process.env.DB_PORT ? 
         Number.parseInt(process.env.DB_PORT) 
         : 5432,
+
+    // Neon requires an encrypted SSL connection.
+  ssl: isNeon ? true : false,
+
+  // Neon supports secure channel binding.
+  enableChannelBinding: isNeon,
+  
 });
 
 // Handle unexpected database errors 
